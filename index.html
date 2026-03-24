@@ -67,7 +67,7 @@
   .pill { padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 800; }
   .pill-ig { background: rgba(225,48,108,0.2); color: #E1306C; }
   .pill-fb { background: rgba(24,119,242,0.2); color: #1877F2; }
-  .pill-dai { background: rgba(16,163,127,0.2); color: #10A37F; }
+  .pill-ai { background: rgba(16,163,127,0.2); color: #10A37F; }
 
   .loading { background: var(--light); border: 2px solid #E0C8B8; border-radius: 14px; padding: 32px; text-align: center; margin-bottom: 24px; display: none; }
   .loading.on { display: block; }
@@ -101,18 +101,26 @@
   .hook { font-size: 16px; font-weight: 900; line-height: 1.3; margin-bottom: 8px; letter-spacing: -0.2px; }
   .caption { font-size: 12px; font-weight: 600; color: var(--mid); line-height: 1.7; margin-bottom: 8px; }
   .hashtags { font-size: 11px; font-weight: 700; color: var(--peach); line-height: 1.5; margin-bottom: 12px; }
-  .copy-actions { display: flex; gap: 6px; }
+  .copy-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
   .imgtext-section { padding: 14px 16px; border-bottom: 1px solid #F0E4D8; }
   .imgtext-display { font-size: 22px; font-weight: 900; color: var(--dark); letter-spacing: -0.5px; line-height: 1.2; background: var(--light); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
 
+  /* STYLE SELECTOR */
   .image-section { padding: 14px 16px; border-bottom: 1px solid #F0E4D8; }
+  .style-selector { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .style-btn { padding: 5px 11px; border-radius: 100px; border: 1.5px solid #DDD0C8; background: transparent; font-family: 'Nunito',sans-serif; font-weight: 700; font-size: 11px; color: var(--mid); cursor: pointer; transition: all 0.12s; display: flex; align-items: center; gap: 4px; }
+  .style-btn:hover { border-color: var(--orange); color: var(--orange); }
+  .style-btn.active { background: var(--orange); border-color: var(--orange); color: white; }
+  .style-btn.gemini-btn { border-color: #4285F4; color: #4285F4; text-decoration: none; }
+  .style-btn.gemini-btn:hover { background: rgba(66,133,244,0.08); }
+
   .image-placeholder { background: var(--light); border-radius: 12px; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 20px; }
   .image-placeholder span { font-size: 12px; font-weight: 700; color: var(--mid); opacity: 0.6; line-height: 1.5; }
   .image-generating { background: var(--light); border-radius: 12px; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
   .image-generating span { font-size: 12px; font-weight: 700; color: var(--mid); }
   .generated-img { width: 100%; aspect-ratio: 1; border-radius: 12px; object-fit: cover; display: block; }
-  .image-actions { display: flex; gap: 6px; margin-top: 10px; }
+  .image-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
 
   .prompt-section { padding: 14px 16px; border-bottom: 1px solid #F0E4D8; }
   .prompt-box { background: var(--light); border-radius: 10px; padding: 11px 13px; font-size: 11px; font-weight: 600; color: var(--dark); line-height: 1.7; border: 1px solid #E8D8CC; margin-bottom: 10px; max-height: 90px; overflow-y: auto; }
@@ -170,7 +178,7 @@
     <div class="setup-card" id="openaiCard">
       <div>
         <h3>🎨 OpenAI API Key</h3>
-        <p>For DALL-E 3 Pixar-style illustrations. platform.openai.com</p>
+        <p>For DALL-E 3 image generation. platform.openai.com</p>
       </div>
       <div class="setup-row">
         <input class="setup-input" id="openaiKeyInput" type="password" placeholder="sk-..."/>
@@ -192,7 +200,7 @@
   <div class="status-bar">
     <div class="status-left">
       <h1>This Week's Posts</h1>
-      <p>Instagram · Facebook · Pixar-style images</p>
+      <p>Instagram · Facebook</p>
     </div>
     <div class="stats">
       <div class="stat"><div class="stat-num" id="sTotal">0</div><div class="stat-label">Generated</div></div>
@@ -204,11 +212,11 @@
   <div class="gen-panel">
     <div>
       <h2>Generate this week's 3 posts</h2>
-      <p>Claude writes fresh copy every time — never repeating recent angles or scenes.</p>
+      <p>Claude picks fresh angles every time. Choose your image style per post — or open Gemini for a photorealistic photo.</p>
       <div class="gen-pills">
         <div class="pill pill-ig">📸 Instagram</div>
         <div class="pill pill-fb">👤 Facebook</div>
-        <div class="pill pill-dai">✨ Pixar · DALL-E 3</div>
+        <div class="pill pill-ai">✨ DALL-E 3 · Gemini</div>
       </div>
     </div>
     <button class="btn btn-white" id="genBtn" onclick="generateAll()">✦ Generate Posts</button>
@@ -217,7 +225,7 @@
   <div class="loading" id="mainLoading">
     <div class="spinner"></div>
     <p id="loadMsg">Claude is writing your 3 posts...</p>
-    <div class="loading-sub" id="loadSub">Picking fresh angles from the full content pool</div>
+    <div class="loading-sub" id="loadSub">Picking fresh angles — checking history to avoid repeats</div>
     <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
   </div>
 
@@ -225,7 +233,7 @@
 
   <div class="empty" id="emptyState">
     <h2>Monday sorted in minutes</h2>
-    <p>Generate 3 posts — Claude picks angles you haven't used recently and keeps the content fresh every week.</p>
+    <p>Generate 3 posts, pick your image style for each, generate or open Gemini for photos, then post.</p>
     <button class="btn btn-orange" onclick="generateAll()">✦ Generate this week's posts</button>
   </div>
 
@@ -234,14 +242,37 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── CONSTANTS ────────────────────────────────────────────────────────────────
 
-const PIXAR_STYLE = `Pixar-style 3D animated illustration. Warm cinematic lighting. Rounded expressive characters with big eyes and smooth skin. Rich saturated colours with warm oranges #E8622A, creams and soft whites. Depth of field with soft bokeh background. High quality render. No text in image.`;
+// ─── IMAGE STYLES ─────────────────────────────────────────────────────────────
+
+const IMAGE_STYLES = {
+  pixar: {
+    label: '✨ Pixar',
+    prefix: 'Pixar-style 3D animated illustration. Warm cinematic lighting. Rounded expressive characters with big eyes and smooth skin. Rich saturated colours with warm oranges, creams and soft whites. Depth of field with soft bokeh background. High quality render. No text in image.'
+  },
+  flat: {
+    label: '🎨 Flat',
+    prefix: 'Bold flat vector illustration. Clean geometric shapes. Warm brand colours — orange #E8622A, cream #FAF0E8, near-black #1C0F0A. Simple expressive characters with no outlines. Modern editorial style. No text in image.'
+  },
+  comic: {
+    label: '💥 Comic',
+    prefix: 'Retro pop art comic illustration. Bold black outlines. Halftone dot patterns. High contrast warm colours — orange, yellow, cream, black. Expressive dramatic character poses. Ben-Day dots in background. No text in image.'
+  },
+  watercolour: {
+    label: '🖌 Watercolour',
+    prefix: 'Loose editorial watercolour illustration. Soft wet-on-wet washes. Warm orange and cream tones. Expressive gestural brushwork. White paper showing through. Warm and premium feel. No text in image.'
+  },
+  '3d': {
+    label: '🧊 3D Render',
+    prefix: 'Clean modern 3D render illustration. Smooth pastel surfaces. Soft shadows and ambient occlusion. Warm orange and cream colour palette. Minimal stylised characters. Architectural product render aesthetic. No text in image.'
+  }
+};
+
+// ─── CONTENT POOLS ────────────────────────────────────────────────────────────
 
 const HISTORY_KEY = 'sorted_post_history';
-const MAX_HISTORY = 12; // remember last 12 posts worth of angles/scenes
+const MAX_HISTORY = 12;
 
-// Full pool of content angles — Claude picks 3 that haven't been used recently
 const ANGLE_POOL = [
   "Problem/Solution: parent misses an important school event because they didn't read the newsletter",
   "Problem/Solution: parent is buried in school emails and can't find the date they need",
@@ -265,7 +296,6 @@ const ANGLE_POOL = [
   "Trust/privacy: no account, no tracking, your newsletter never stored"
 ];
 
-// Full pool of character scenes — Claude picks ones that haven't been used recently
 const SCENE_POOL = [
   "stressed mum at kitchen bench surrounded by papers and a coffee going cold",
   "happy mum smiling at her phone at the kitchen bench, kids eating breakfast behind her",
@@ -300,48 +330,36 @@ document.getElementById('weekLbl').textContent = `Week of ${mon.toLocaleDateStri
 
 if (apiKey) { document.getElementById('apiKeyInput').value = apiKey; document.getElementById('apiCard').classList.add('saved'); }
 if (openaiKey) { document.getElementById('openaiKeyInput').value = openaiKey; document.getElementById('openaiCard').classList.add('saved'); }
-
 updateHistoryBanner();
 
 // ─── HISTORY ──────────────────────────────────────────────────────────────────
 
-function getHistory() {
-  try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch { return []; }
-}
+function getHistory() { try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch { return []; } }
 
 function saveToHistory(newPosts) {
   const history = getHistory();
-  newPosts.forEach(p => {
-    history.push({ angle: p.angle_used, scene: p.scene_used, hook: p.hook, week: document.getElementById('weekLbl').textContent });
-  });
-  // Keep only the most recent MAX_HISTORY entries
-  const trimmed = history.slice(-MAX_HISTORY);
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
+  newPosts.forEach(p => history.push({ angle: p.angle_used, scene: p.scene_used, hook: p.hook, week: document.getElementById('weekLbl').textContent }));
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(-MAX_HISTORY)));
   updateHistoryBanner();
 }
 
-function clearHistory() {
-  localStorage.removeItem(HISTORY_KEY);
-  updateHistoryBanner();
-  toast('Content history cleared');
-}
+function clearHistory() { localStorage.removeItem(HISTORY_KEY); updateHistoryBanner(); toast('Content history cleared'); }
 
 function updateHistoryBanner() {
   const history = getHistory();
   const banner = document.getElementById('historyBanner');
-  if (history.length === 0) { banner.style.display = 'none'; return; }
+  if (!history.length) { banner.style.display = 'none'; return; }
   banner.style.display = 'flex';
   document.getElementById('historyLabel').textContent = `📚 ${history.length} past posts in memory — Claude will avoid repeating these`;
-  const recent = history.slice(-3).map(h => h.hook).join(' · ');
-  document.getElementById('historyDetail').textContent = `Most recent: ${recent}`;
+  document.getElementById('historyDetail').textContent = `Most recent: ${history.slice(-3).map(h=>h.hook).join(' · ')}`;
 }
 
 function getAvoidList() {
   const history = getHistory();
   if (!history.length) return '';
-  const angles = [...new Set(history.map(h => h.angle).filter(Boolean))];
-  const scenes = [...new Set(history.map(h => h.scene).filter(Boolean))];
-  const hooks = history.slice(-6).map(h => h.hook).filter(Boolean);
+  const angles = [...new Set(history.map(h=>h.angle).filter(Boolean))];
+  const scenes = [...new Set(history.map(h=>h.scene).filter(Boolean))];
+  const hooks = history.slice(-6).map(h=>h.hook).filter(Boolean);
   let avoid = '';
   if (angles.length) avoid += `\nDo NOT use these angles again: ${angles.join('; ')}`;
   if (scenes.length) avoid += `\nDo NOT use these character scenes again: ${scenes.join('; ')}`;
@@ -349,147 +367,126 @@ function getAvoidList() {
   return avoid;
 }
 
-// Pick random items from pool excluding recently used ones
 function pickFresh(pool, history, key, count) {
-  const used = new Set(history.map(h => h[key]).filter(Boolean));
-  const fresh = pool.filter(item => !used.has(item));
-  const source = fresh.length >= count ? fresh : pool; // fallback if pool exhausted
-  const shuffled = source.sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+  const used = new Set(history.map(h=>h[key]).filter(Boolean));
+  const fresh = pool.filter(item=>!used.has(item));
+  return (fresh.length >= count ? fresh : pool).sort(()=>Math.random()-0.5).slice(0,count);
 }
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 
 function saveApiKey() {
   const v = document.getElementById('apiKeyInput').value.trim();
-  if (v) { apiKey = v; localStorage.setItem('sorted_api_key', v); document.getElementById('apiCard').classList.add('saved'); document.getElementById('noKeyAlert').classList.remove('on'); toast('Anthropic key saved'); }
+  if (v) { apiKey=v; localStorage.setItem('sorted_api_key',v); document.getElementById('apiCard').classList.add('saved'); document.getElementById('noKeyAlert').classList.remove('on'); toast('Anthropic key saved'); }
 }
-
 function saveOpenAIKey() {
   const v = document.getElementById('openaiKeyInput').value.trim();
-  if (v) { openaiKey = v; localStorage.setItem('sorted_openai_key', v); document.getElementById('openaiCard').classList.add('saved'); toast('OpenAI key saved'); }
+  if (v) { openaiKey=v; localStorage.setItem('sorted_openai_key',v); document.getElementById('openaiCard').classList.add('saved'); toast('OpenAI key saved'); }
 }
-
-function toast(msg, ms=3000) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('on');
-  setTimeout(() => t.classList.remove('on'), ms);
+function toast(msg,ms=3000) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),ms);
 }
-
 function updateStats() {
-  document.getElementById('sTotal').textContent = posts.length;
-  document.getElementById('sDone').textContent = posts.filter(p=>p.status==='done').length;
-  document.getElementById('sSkipped').textContent = posts.filter(p=>p.status==='skipped').length;
+  document.getElementById('sTotal').textContent=posts.length;
+  document.getElementById('sDone').textContent=posts.filter(p=>p.status==='done').length;
+  document.getElementById('sSkipped').textContent=posts.filter(p=>p.status==='skipped').length;
 }
-
 async function claudeAPI(prompt) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1200,
-      messages: [{ role: 'user', content: prompt }]
-    })
+  const res = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})
   });
-  if (!res.ok) { const err = await res.json().catch(()=>({})); throw new Error(err?.error?.message || `API error ${res.status}`); }
-  const data = await res.json();
+  if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err?.error?.message||`API error ${res.status}`);}
+  const data=await res.json();
   return data.content.map(i=>i.text||'').join('');
 }
-
-async function dalleGenerate(prompt) {
-  const fullPrompt = `${PIXAR_STYLE} ${prompt}`;
-  const res = await fetch('https://api.openai.com/v1/images/generations', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
-    body: JSON.stringify({ model: 'dall-e-3', prompt: fullPrompt, n: 1, size: '1024x1024', quality: 'standard' })
+async function dalleGenerate(styleKey, scene) {
+  const style = IMAGE_STYLES[styleKey] || IMAGE_STYLES.pixar;
+  const fullPrompt = `${style.prefix} ${scene}`;
+  const res = await fetch('https://api.openai.com/v1/images/generations',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${openaiKey}`},
+    body:JSON.stringify({model:'dall-e-3',prompt:fullPrompt,n:1,size:'1024x1024',quality:'standard'})
   });
-  if (!res.ok) { const err = await res.json().catch(()=>({})); throw new Error(err?.error?.message || `OpenAI error ${res.status}`); }
-  const data = await res.json();
+  if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err?.error?.message||`OpenAI error ${res.status}`);}
+  const data=await res.json();
   return data.data[0].url;
 }
 
 // ─── GENERATE ─────────────────────────────────────────────────────────────────
 
 async function generateAll() {
-  if (!apiKey) { document.getElementById('noKeyAlert').classList.add('on'); return; }
-  const btn = document.getElementById('genBtn');
-  const loading = document.getElementById('mainLoading');
-  document.getElementById('emptyState').style.display = 'none';
-  document.getElementById('postsGrid').innerHTML = '';
-  posts = []; updateStats();
-  btn.disabled = true; btn.textContent = '... Writing';
+  if(!apiKey){document.getElementById('noKeyAlert').classList.add('on');return;}
+  const btn=document.getElementById('genBtn');
+  const loading=document.getElementById('mainLoading');
+  document.getElementById('emptyState').style.display='none';
+  document.getElementById('postsGrid').innerHTML='';
+  posts=[];updateStats();
+  btn.disabled=true;btn.textContent='... Writing';
   loading.classList.add('on');
-  document.getElementById('progFill').style.width = '10%';
-  document.getElementById('loadMsg').textContent = 'Claude is writing your 3 posts...';
-  document.getElementById('loadSub').textContent = 'Picking fresh angles — checking history to avoid repeats';
+  document.getElementById('progFill').style.width='10%';
+  document.getElementById('loadMsg').textContent='Claude is writing your 3 posts...';
+  document.getElementById('loadSub').textContent='Picking fresh angles — checking history to avoid repeats';
 
-  // Pick 3 fresh angles and 3 fresh scenes from the pools
-  const history = getHistory();
-  const chosenAngles = pickFresh(ANGLE_POOL, history, 'angle', 3);
-  const chosenScenes = pickFresh(SCENE_POOL, history, 'scene', 3);
-  const avoidList = getAvoidList();
+  const history=getHistory();
+  const chosenAngles=pickFresh(ANGLE_POOL,history,'angle',3);
+  const chosenScenes=pickFresh(SCENE_POOL,history,'scene',3);
+  const avoidList=getAvoidList();
 
   try {
-    const raw = await claudeAPI(`You are a senior social media strategist for Sorted — an iOS app that uses AI to read school newsletters and add every event to Apple Calendar or Google Calendar. No account needed. Built for busy Australian parents.
+    const raw=await claudeAPI(`You are a senior social media strategist for Sorted — an iOS app that uses AI to read school newsletters and add every event to Apple Calendar or Google Calendar. No account needed. Built for busy Australian parents.
 
 Brand voice: warm, confident, slightly cheeky. Never corporate. Never salesy.
 Tagline: "AI reads the newsletter so you do not have to."
 Platforms: Instagram and Facebook. Square 1:1 format.
 ${avoidList}
 
-Generate exactly 3 posts using THESE SPECIFIC angles and scenes — do not deviate from them:
+Generate exactly 3 posts using THESE SPECIFIC angles and scenes:
 
 Post 1: Angle — "${chosenAngles[0]}" | Scene — "${chosenScenes[0]}"
 Post 2: Angle — "${chosenAngles[1]}" | Scene — "${chosenScenes[1]}"
 Post 3: Angle — "${chosenAngles[2]}" | Scene — "${chosenScenes[2]}"
 
-For each post provide:
-1. Caption: hook (max 8 words, punchy, no trailing punctuation) + 2-3 sentence body (warm, direct, parent-friendly, soft call to action) + hashtags
-2. Image overlay text: max 6 words, bold and punchy, goes directly on the Pixar illustration, no punctuation
-3. Image scene: a Pixar-style 3D illustration description based on the assigned scene above. Rounded expressive character, warm brand colours, no text in image. 2-3 sentences.
+For each post:
+1. Caption: hook (max 8 words, punchy, no trailing punctuation) + 2-3 sentence body (warm, direct, soft call to action) + hashtags
+2. Image overlay text: max 6 words, bold and punchy, no punctuation
+3. Image scene: a character and scene description for an illustrated image. Based on the assigned scene. Describe character expression, pose, setting details, mood, colours. No text in image. 2-3 sentences.
 
 Respond ONLY with valid JSON. No markdown. No preamble:
 {"posts":[{
-  "angle_used": "exact angle string used",
-  "scene_used": "exact scene string used",
-  "type": "short label for the angle e.g. Problem/Solution",
-  "tone": "stressed or happy or confident",
-  "hook": "hook text",
-  "caption": "body sentences",
-  "hashtags": "#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums",
-  "image_text": "max 6 words overlay text",
-  "image_scene": "Pixar illustration description"
+  "angle_used":"exact angle string",
+  "scene_used":"exact scene string",
+  "type":"short label e.g. Problem/Solution",
+  "tone":"stressed or happy or confident",
+  "hook":"hook text",
+  "caption":"body sentences",
+  "hashtags":"#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums",
+  "image_text":"max 6 words overlay text",
+  "image_scene":"character and scene description for illustration. No text. 2-3 sentences."
 }]}`);
 
-    document.getElementById('progFill').style.width = '85%';
-    const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
-    posts = parsed.posts.slice(0,3).map((p,i)=>({
-      ...p, id: i, status: 'pending', regenLoading: false,
-      imageUrl: null, imageLoading: false, imageError: null
+    document.getElementById('progFill').style.width='85%';
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    posts=parsed.posts.slice(0,3).map((p,i)=>({
+      ...p,id:i,status:'pending',regenLoading:false,
+      imageUrl:null,imageLoading:false,imageError:null,
+      selectedStyle:'pixar'
     }));
-
-    // Save to history immediately so reruns this session also avoid repeats
     saveToHistory(posts);
-
     await new Promise(r=>setTimeout(r,400));
-    document.getElementById('progFill').style.width = '100%';
+    document.getElementById('progFill').style.width='100%';
     setTimeout(()=>{
       loading.classList.remove('on');
-      renderGrid(); updateStats();
-      btn.disabled = false; btn.textContent = '↺ Regenerate';
+      renderGrid();updateStats();
+      btn.disabled=false;btn.textContent='↺ Regenerate';
       toast(`${posts.length} fresh posts ready`);
-    }, 300);
-
+    },300);
   } catch(e) {
     console.error(e);
     loading.classList.remove('on');
-    btn.disabled = false; btn.textContent = '✦ Generate Posts';
+    btn.disabled=false;btn.textContent='✦ Generate Posts';
     toast(`Error: ${e.message||'Check your API key and try again'}`);
   }
 }
@@ -497,35 +494,39 @@ Respond ONLY with valid JSON. No markdown. No preamble:
 // ─── CARD RENDER ──────────────────────────────────────────────────────────────
 
 function renderGrid() {
-  const g = document.getElementById('postsGrid');
-  g.innerHTML = '';
+  const g=document.getElementById('postsGrid');
+  g.innerHTML='';
   posts.forEach((p,i)=>{
-    const c = document.createElement('div');
-    c.className = `card ${p.status==='done'?'done':p.status==='skipped'?'skipped':''}`;
-    c.id = `card-${i}`; c.style.animationDelay = `${i*0.08}s`;
-    c.innerHTML = cardHTML(p,i); g.appendChild(c);
+    const c=document.createElement('div');
+    c.className=`card ${p.status==='done'?'done':p.status==='skipped'?'skipped':''}`;
+    c.id=`card-${i}`;c.style.animationDelay=`${i*0.08}s`;
+    c.innerHTML=cardHTML(p,i);g.appendChild(c);
   });
 }
 
 function refreshCard(i) {
-  const c = document.getElementById(`card-${i}`);
-  const p = posts[i];
-  c.className = `card ${p.status==='done'?'done':p.status==='skipped'?'skipped':''}`;
-  c.innerHTML = cardHTML(p,i);
+  const c=document.getElementById(`card-${i}`);
+  const p=posts[i];
+  c.className=`card ${p.status==='done'?'done':p.status==='skipped'?'skipped':''}`;
+  c.innerHTML=cardHTML(p,i);
 }
 
 function toneLabel(tone) {
-  const map = { stressed:'😩 Stressed', happy:'😊 Happy', confident:'💪 Confident' };
-  return map[tone] || tone || '';
+  return {stressed:'😩 Stressed',happy:'😊 Happy',confident:'💪 Confident'}[tone]||tone||'';
+}
+
+function buildGeminiUrl(scene) {
+  const prompt = encodeURIComponent(`Photorealistic lifestyle photo for social media. Australian parent (90% chance female), aged 28-42. ${scene} Warm natural lighting. Cinematic depth of field. Shot on 35mm lens. No text in image. High quality photography.`);
+  return `https://gemini.google.com/app?q=${prompt}`;
 }
 
 function cardHTML(p,i) {
-  if (p.regenLoading) {
+  if(p.regenLoading) {
     return `<div class="card-header"><span class="post-type">${p.type}</span></div>
     <div class="regen-loading"><div class="mini-spin"></div>Rewriting post...</div>`;
   }
 
-  const header = `<div class="card-header">
+  const header=`<div class="card-header">
     <span class="post-type">${p.type}</span>
     <div class="card-header-right">
       <span class="tone-tag">${toneLabel(p.tone)}</span>
@@ -533,7 +534,7 @@ function cardHTML(p,i) {
     </div>
   </div>`;
 
-  const copy = `<div class="copy-section">
+  const copy=`<div class="copy-section">
     <div class="section-label">Caption</div>
     <div class="hook">${p.hook}</div>
     <div class="caption">${p.caption}</div>
@@ -544,7 +545,7 @@ function cardHTML(p,i) {
     </div>
   </div>`;
 
-  const imgtext = `<div class="imgtext-section">
+  const imgtext=`<div class="imgtext-section">
     <div class="section-label">Image text <span class="badge" style="background:rgba(232,98,42,0.12);color:var(--orange);">under 6 words</span></div>
     <div class="imgtext-display">${p.image_text||''}</div>
     <div class="copy-actions">
@@ -552,33 +553,42 @@ function cardHTML(p,i) {
     </div>
   </div>`;
 
-  let imageContent = '';
-  if (p.imageLoading) {
-    imageContent = `<div class="image-generating">
+  // Style selector buttons
+  const styleButtons = Object.entries(IMAGE_STYLES).map(([key,s])=>`
+    <button class="style-btn ${p.selectedStyle===key?'active':''}" onclick="setStyle(${i},'${key}')">${s.label}</button>
+  `).join('');
+
+  // Gemini link — copies prompt to clipboard and opens Gemini
+  const geminiBtn = `<a class="style-btn gemini-btn" href="${buildGeminiUrl(p.image_scene)}" target="_blank" onclick="copyGeminiPrompt(${i})">📸 Gemini photo</a>`;
+
+  let imageContent='';
+  if(p.imageLoading) {
+    imageContent=`<div class="image-generating">
       <div class="spinner" style="width:28px;height:28px;margin:0;"></div>
-      <span>Generating Pixar illustration...</span>
+      <span>Generating ${IMAGE_STYLES[p.selectedStyle]?.label||''} image...</span>
     </div>`;
-  } else if (p.imageUrl) {
-    imageContent = `<img class="generated-img" src="${p.imageUrl}" alt="Generated image"/>
+  } else if(p.imageUrl) {
+    imageContent=`<img class="generated-img" src="${p.imageUrl}" alt="Generated image"/>
     <div class="image-actions">
       <a href="${p.imageUrl}" download="sorted-post-${i+1}.png" target="_blank" class="btn btn-green btn-sm">⬇ Download</a>
       <button class="btn btn-ghost btn-sm" onclick="generateImage(${i})">↺ Regenerate</button>
     </div>`;
   } else {
-    imageContent = `<div class="image-placeholder">
+    imageContent=`<div class="image-placeholder">
       <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="2" y="2" width="36" height="36" rx="7" stroke="#E8622A" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="13" cy="14" r="4" fill="#E8622A" opacity="0.3"/><path d="M2 28 L12 17 L21 25 L28 18 L38 28" stroke="#E8622A" stroke-width="2" opacity="0.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>${!openaiKey?'Add your OpenAI key above to generate images':'Pixar-style illustration ready to generate'}</span>
+      <span>${!openaiKey?'Add your OpenAI key above to generate images':'Select a style and generate, or open Gemini for a photo'}</span>
     </div>
-    ${openaiKey?`<div class="image-actions"><button class="btn btn-orange btn-sm" style="width:100%;justify-content:center;" onclick="generateImage(${i})">✨ Generate Pixar Image</button></div>`:''}`;
+    ${openaiKey?`<div class="image-actions"><button class="btn btn-orange btn-sm" style="flex:1;justify-content:center;" onclick="generateImage(${i})">Generate ${IMAGE_STYLES[p.selectedStyle]?.label||''} image</button></div>`:''}`;
   }
-  if (p.imageError) imageContent += `<div style="font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">${p.imageError}</div>`;
+  if(p.imageError) imageContent+=`<div style="font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">${p.imageError}</div>`;
 
-  const imageSection = `<div class="image-section">
-    <div class="section-label">Image <span class="badge" style="background:rgba(16,163,127,0.12);color:#10A37F;">Pixar · DALL-E 3</span></div>
+  const imageSection=`<div class="image-section">
+    <div class="section-label">Image style</div>
+    <div class="style-selector">${styleButtons}${geminiBtn}</div>
     ${imageContent}
   </div>`;
 
-  const promptSection = `<div class="prompt-section">
+  const promptSection=`<div class="prompt-section">
     <div class="section-label">Scene description</div>
     <div class="prompt-box">${p.image_scene||''}</div>
     <div class="copy-actions">
@@ -586,77 +596,90 @@ function cardHTML(p,i) {
     </div>
   </div>`;
 
-  let footer = '';
-  if (p.status==='done') {
-    footer = `<div class="card-footer"><div class="done-pill"><span>✓ Done</span><button class="btn-undo" onclick="setStatus(${i},'pending')">Undo</button></div></div>`;
-  } else if (p.status==='skipped') {
-    footer = `<div class="card-footer"><div class="footer-btns"><button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center;" onclick="setStatus(${i},'pending')">Restore</button></div></div>`;
+  let footer='';
+  if(p.status==='done') {
+    footer=`<div class="card-footer"><div class="done-pill"><span>✓ Done</span><button class="btn-undo" onclick="setStatus(${i},'pending')">Undo</button></div></div>`;
+  } else if(p.status==='skipped') {
+    footer=`<div class="card-footer"><div class="footer-btns"><button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center;" onclick="setStatus(${i},'pending')">Restore</button></div></div>`;
   } else {
-    footer = `<div class="card-footer"><div class="footer-btns">
+    footer=`<div class="card-footer"><div class="footer-btns">
       <button class="btn btn-green btn-sm" style="flex:1;justify-content:center;" onclick="setStatus(${i},'done')">✓ Mark done</button>
       <button class="btn btn-ghost btn-sm" onclick="setStatus(${i},'skipped')">✕ Skip</button>
     </div></div>`;
   }
 
-  return header + copy + imgtext + imageSection + promptSection + footer;
+  return header+copy+imgtext+imageSection+promptSection+footer;
 }
 
 // ─── ACTIONS ──────────────────────────────────────────────────────────────────
 
+function setStyle(i, styleKey) {
+  posts[i].selectedStyle = styleKey;
+  posts[i].imageUrl = null;
+  posts[i].imageError = null;
+  refreshCard(i);
+}
+
 async function generateImage(i) {
-  if (!openaiKey) { toast('Add your OpenAI key first'); return; }
-  posts[i].imageLoading = true; posts[i].imageError = null; refreshCard(i);
+  if(!openaiKey){toast('Add your OpenAI key first');return;}
+  posts[i].imageLoading=true;posts[i].imageError=null;refreshCard(i);
   try {
-    const url = await dalleGenerate(posts[i].image_scene);
-    posts[i].imageUrl = url; posts[i].imageLoading = false;
-    refreshCard(i); toast('Pixar image ready — click Download to save');
+    const url=await dalleGenerate(posts[i].selectedStyle||'pixar', posts[i].image_scene);
+    posts[i].imageUrl=url;posts[i].imageLoading=false;
+    refreshCard(i);toast('Image ready — click Download to save');
   } catch(e) {
-    posts[i].imageLoading = false;
-    posts[i].imageError = `Image failed: ${e.message}`;
-    refreshCard(i); toast(`Image error: ${e.message}`);
+    posts[i].imageLoading=false;posts[i].imageError=`Image failed: ${e.message}`;
+    refreshCard(i);toast(`Image error: ${e.message}`);
   }
 }
 
+function copyGeminiPrompt(i) {
+  const p = posts[i];
+  const prompt = `Photorealistic lifestyle photo for social media. Australian parent (90% chance female), aged 28-42. ${p.image_scene} Warm natural lighting. Cinematic depth of field. Shot on 35mm lens. No text in image. High quality photography.`;
+  navigator.clipboard.writeText(prompt).catch(()=>{});
+  toast('Photorealistic prompt copied — paste into Gemini if needed');
+}
+
 async function regenCopy(i) {
-  if (!apiKey) { toast('Add your API key first'); return; }
-  posts[i].regenLoading = true; refreshCard(i);
+  if(!apiKey){toast('Add your API key first');return;}
+  posts[i].regenLoading=true;refreshCard(i);
   try {
-    const raw = await claudeAPI(`You are a social media strategist for Sorted — an iOS app that reads school newsletters with AI and adds every event to Apple Calendar or Google Calendar. Built for busy Australian parents. Brand voice: warm, confident, slightly cheeky.
+    const raw=await claudeAPI(`You are a social media strategist for Sorted — an iOS app that reads school newsletters with AI and adds every event to Apple Calendar or Google Calendar. Built for busy Australian parents. Brand voice: warm, confident, slightly cheeky.
 
-Write ONE new post. The previous hook was: "${posts[i].hook}" — write something with a completely different angle and energy.
+Write ONE new post with a completely different angle. Previous hook was: "${posts[i].hook}" — write something fresh.
 
-Also write new image overlay text (max 6 words, punchy, no punctuation) and a new Pixar-style 3D illustration scene description (Australian parent, warm brand colours, no text in image, 2-3 sentences).
+Also write new image overlay text (max 6 words, punchy, no punctuation) and a new image scene description (Australian parent, warm colours, no text in image, 2-3 sentences).
 
 Respond ONLY with valid JSON, no markdown:
 {
-  "angle_used": "brief angle description",
-  "scene_used": "brief scene description",
-  "type": "short label",
-  "tone": "stressed or happy or confident",
-  "hook": "max 8 words, no trailing punctuation",
-  "caption": "2-3 sentences, warm and direct, soft call to action",
-  "hashtags": "#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums",
-  "image_text": "max 6 words, no punctuation",
-  "image_scene": "Pixar illustration scene. No text. 2-3 sentences."
+  "angle_used":"brief angle description",
+  "scene_used":"brief scene description",
+  "type":"short label",
+  "tone":"stressed or happy or confident",
+  "hook":"max 8 words, no trailing punctuation",
+  "caption":"2-3 sentences, warm and direct, soft call to action",
+  "hashtags":"#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums",
+  "image_text":"max 6 words, no punctuation",
+  "image_scene":"character and scene description. No text. 2-3 sentences."
 }`);
-    const p2 = JSON.parse(raw.replace(/```json|```/g,'').trim());
-    posts[i] = { ...posts[i], ...p2, regenLoading: false, imageUrl: null, imageError: null };
-    refreshCard(i); toast('Post rewritten');
+    const p2=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    posts[i]={...posts[i],...p2,regenLoading:false,imageUrl:null,imageError:null};
+    refreshCard(i);toast('Post rewritten');
   } catch(e) {
-    posts[i].regenLoading = false; refreshCard(i); toast('Rewrite failed — try again');
+    posts[i].regenLoading=false;refreshCard(i);toast('Rewrite failed — try again');
   }
 }
 
 function copyCopy(i) {
-  const p = posts[i];
+  const p=posts[i];
   navigator.clipboard.writeText(`${p.hook}\n\n${p.caption}\n\n${p.hashtags}`).then(()=>toast('Caption copied'));
 }
 function copyImageText(i) { navigator.clipboard.writeText(posts[i].image_text||'').then(()=>toast('Image text copied')); }
 function copyPrompt(i) { navigator.clipboard.writeText(posts[i].image_scene||'').then(()=>toast('Scene description copied')); }
 function setStatus(i,s) {
-  posts[i].status=s; refreshCard(i); updateStats();
-  if(s==='done') toast('✓ Marked as done');
-  if(s==='skipped') toast('Post skipped');
+  posts[i].status=s;refreshCard(i);updateStats();
+  if(s==='done')toast('✓ Marked as done');
+  if(s==='skipped')toast('Post skipped');
 }
 </script>
 </body>
