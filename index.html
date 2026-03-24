@@ -88,16 +88,22 @@
   .pb.ig { background: #E1306C; color: white; }
   .pb.fb { background: #1877F2; color: white; }
 
+  /* SECTION 1 - CAPTION */
   .copy-section { padding: 16px; border-bottom: 1px solid #F0E4D8; }
+  .section-label { font-size: 10px; font-weight: 800; color: var(--mid); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .badge { padding: 2px 7px; border-radius: 100px; font-size: 10px; font-weight: 800; }
   .hook { font-size: 16px; font-weight: 900; line-height: 1.3; margin-bottom: 8px; letter-spacing: -0.2px; }
   .caption { font-size: 12px; font-weight: 600; color: var(--mid); line-height: 1.7; margin-bottom: 8px; }
   .hashtags { font-size: 11px; font-weight: 700; color: var(--peach); line-height: 1.5; margin-bottom: 12px; }
   .copy-actions { display: flex; gap: 6px; }
 
+  /* SECTION 2 - IMAGE TEXT */
+  .imgtext-section { padding: 14px 16px; border-bottom: 1px solid #F0E4D8; }
+  .imgtext-display { font-size: 22px; font-weight: 900; color: var(--dark); letter-spacing: -0.5px; line-height: 1.2; background: var(--light); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+  .imgtext-actions { display: flex; gap: 6px; }
+
+  /* SECTION 3 - GEMINI PROMPT */
   .gemini-section { padding: 14px 16px; border-bottom: 1px solid #F0E4D8; }
-  .section-label { font-size: 10px; font-weight: 800; color: var(--mid); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-  .section-label .badge { padding: 2px 7px; border-radius: 100px; font-size: 10px; }
-  .badge-gem { background: rgba(66,133,244,0.12); color: #4285F4; }
   .prompt-box { background: var(--light); border-radius: 10px; padding: 11px 13px; font-size: 11px; font-weight: 600; color: var(--dark); line-height: 1.7; border: 1px solid #E8D8CC; margin-bottom: 10px; max-height: 110px; overflow-y: auto; }
   .gemini-actions { display: flex; gap: 6px; align-items: center; }
   .gemini-link { font-size: 12px; font-weight: 800; color: #4285F4; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; border-radius: 100px; border: 1.5px solid rgba(66,133,244,0.3); transition: all 0.15s; }
@@ -145,7 +151,7 @@
   <div class="setup-card" id="apiCard">
     <div>
       <h3>🔑 Anthropic API Key</h3>
-      <p>Required to generate post copy. Saved only in your browser. Get yours at console.anthropic.com</p>
+      <p>Required to generate posts. Saved only in your browser. Get yours at console.anthropic.com</p>
     </div>
     <div class="setup-row">
       <input class="setup-input" id="apiKeyInput" type="password" placeholder="sk-ant-..."/>
@@ -170,7 +176,7 @@
   <div class="gen-panel">
     <div>
       <h2>Generate this week's 3 posts</h2>
-      <p>Claude writes the copy and a Gemini image prompt for each post. You handle the images and posting.</p>
+      <p>Claude writes the caption, image overlay text, and a Gemini image prompt for each post.</p>
       <div class="gen-pills">
         <div class="pill pill-ig">📸 Instagram</div>
         <div class="pill pill-fb">👤 Facebook</div>
@@ -183,7 +189,7 @@
   <div class="loading" id="mainLoading">
     <div class="spinner"></div>
     <p id="loadMsg">Claude is writing your 3 posts...</p>
-    <div class="loading-sub" id="loadSub">Crafting copy and Gemini image prompts</div>
+    <div class="loading-sub" id="loadSub">Crafting captions, image text and Gemini prompts</div>
     <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
   </div>
 
@@ -191,7 +197,7 @@
 
   <div class="empty" id="emptyState">
     <h2>Monday sorted in minutes</h2>
-    <p>Generate 3 posts, copy the Gemini prompt for each, create your image, and post when ready.</p>
+    <p>Generate 3 posts — copy the Gemini prompt, create your image, drop it into your template, and post.</p>
     <button class="btn btn-orange" onclick="generateAll()">✦ Generate this week's posts</button>
   </div>
 
@@ -270,7 +276,7 @@ async function generateAll() {
   loading.classList.add('on');
   document.getElementById('progFill').style.width = '10%';
   document.getElementById('loadMsg').textContent = 'Claude is writing your 3 posts...';
-  document.getElementById('loadSub').textContent = 'Crafting copy and Gemini image prompts';
+  document.getElementById('loadSub').textContent = 'Crafting captions, image text and Gemini prompts';
 
   try {
     const raw = await claudeAPI(`You are a senior social media strategist for Sorted — an iOS app that uses AI to read school newsletters and add every event to Apple Calendar or Google Calendar. No account needed. Built for busy Australian parents.
@@ -279,9 +285,12 @@ Brand voice: warm, confident, slightly cheeky. Never corporate.
 Tagline: "AI reads the newsletter so you do not have to."
 Platforms: Instagram and Facebook. Square 1:1 format.
 
-Generate exactly 3 posts. Vary the angle: problem/solution, aspirational outcome, and relatable humour or feature spotlight. Mix tones.
+Generate exactly 3 posts. Vary the angle: problem/solution, aspirational outcome, and relatable humour or feature spotlight. Mix tones — stressed parent for problem posts, happy/confident for aspirational.
 
-For each post also write a Gemini image generation prompt for a photorealistic lifestyle photo. Subject: Australian parent (90% female, 10% male), aged 28-42. Scene matches post tone — stressed/overwhelmed for problem posts, calm/happy/confident for aspirational posts. Morning school routine settings. Warm natural lighting. No text in image. Cinematic depth of field. Shot on 35mm lens.
+For each post provide:
+1. Caption copy (hook + body + hashtags)
+2. Image overlay text — max 6 words, bold and punchy, goes directly on the photo in the Canva template. No punctuation. Make it grabby and human.
+3. A Gemini image generation prompt for a photorealistic lifestyle photo. Australian parent (90% female, 10% male), aged 28-42. Scene matches post tone. Morning school routine setting. Warm natural lighting. No text in the image. Cinematic depth of field. Shot on 35mm lens.
 
 Respond ONLY with valid JSON. No markdown. No preamble:
 {"posts":[{
@@ -290,6 +299,7 @@ Respond ONLY with valid JSON. No markdown. No preamble:
   "hook": "Max 8 words. Punchy. No trailing punctuation",
   "caption": "2-3 sentences. Warm direct parent-friendly. Soft call to action.",
   "hashtags": "#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums",
+  "image_text": "Max 6 words. Punchy overlay text. No punctuation",
   "gemini_prompt": "Photorealistic lifestyle photo. Australian mum or dad, 30s, [specific scene]. [Lighting]. [Mood]. No text in image. Cinematic 35mm. [3-4 sentences total.]"
 }]}`);
 
@@ -354,6 +364,7 @@ function cardHTML(p,i) {
   </div>`;
 
   const copy = `<div class="copy-section">
+    <div class="section-label">Caption</div>
     <div class="hook">${p.hook}</div>
     <div class="caption">${p.caption}</div>
     <div class="hashtags">${p.hashtags}</div>
@@ -363,8 +374,16 @@ function cardHTML(p,i) {
     </div>
   </div>`;
 
+  const imgtext = `<div class="imgtext-section">
+    <div class="section-label">Image text <span class="badge" style="background:rgba(232,98,42,0.12);color:var(--orange);">under 6 words</span></div>
+    <div class="imgtext-display">${p.image_text || ''}</div>
+    <div class="imgtext-actions">
+      <button class="btn btn-ghost btn-sm" onclick="copyImageText(${i})">📋 Copy image text</button>
+    </div>
+  </div>`;
+
   const gemini = `<div class="gemini-section">
-    <div class="section-label">Image prompt <span class="badge badge-gem">Gemini</span></div>
+    <div class="section-label">Image prompt <span class="badge" style="background:rgba(66,133,244,0.12);color:#4285F4;">Gemini</span></div>
     <div class="prompt-box">${p.gemini_prompt}</div>
     <div class="gemini-actions">
       <button class="btn btn-ghost btn-sm" onclick="copyGemini(${i})">📋 Copy prompt</button>
@@ -384,7 +403,7 @@ function cardHTML(p,i) {
     </div></div>`;
   }
 
-  return header + copy + gemini + footer;
+  return header + copy + imgtext + gemini + footer;
 }
 
 async function regenCopy(i) {
@@ -395,7 +414,9 @@ async function regenCopy(i) {
 
 Write ONE new post with a fresh angle. Previous hook was: "${posts[i].hook}" — write something different.
 
-Also write a new Gemini image prompt: photorealistic lifestyle photo, Australian parent (90% female, 10% male), 28-42, morning school routine, tone matching the post, warm lighting, no text in image, cinematic 35mm.
+Also write:
+- Image overlay text: max 6 words, punchy, no punctuation, goes on the photo
+- Gemini image prompt: photorealistic lifestyle photo, Australian parent (90% female, 10% male), 28-42, morning school routine, tone matching post, warm lighting, no text in image, cinematic 35mm
 
 Respond ONLY with valid JSON, no markdown:
 {
@@ -404,6 +425,7 @@ Respond ONLY with valid JSON, no markdown:
   "hook": "Max 8 words. Fresh angle. No trailing punctuation",
   "caption": "2-3 sentences. Warm and direct. Soft call to action.",
   "hashtags": "#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums",
+  "image_text": "Max 6 words. Punchy overlay text. No punctuation",
   "gemini_prompt": "Full Gemini image prompt. No text in image. 3-4 sentences."
 }`);
     const p2 = JSON.parse(raw.replace(/```json|```/g,'').trim());
@@ -417,6 +439,10 @@ Respond ONLY with valid JSON, no markdown:
 function copyCopy(i) {
   const p = posts[i];
   navigator.clipboard.writeText(`${p.hook}\n\n${p.caption}\n\n${p.hashtags}`).then(()=>toast('Caption copied'));
+}
+
+function copyImageText(i) {
+  navigator.clipboard.writeText(posts[i].image_text||'').then(()=>toast('Image text copied'));
 }
 
 function copyGemini(i) {
