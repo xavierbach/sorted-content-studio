@@ -48,6 +48,10 @@
   .alert { background: rgba(232,98,42,0.08); border: 1.5px solid rgba(232,98,42,0.25); border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; font-size: 13px; font-weight: 700; color: var(--orange); display: none; }
   .alert.on { display: block; }
 
+  .history-banner { background: white; border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow); flex-wrap: wrap; gap: 10px; }
+  .history-banner p { font-size: 12px; font-weight: 700; color: var(--mid); }
+  .history-banner span { font-size: 11px; font-weight: 600; color: var(--mid); opacity: 0.7; margin-top: 2px; display: block; }
+
   .status-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 14px; }
   .status-left h1 { font-size: 24px; font-weight: 900; letter-spacing: -0.4px; }
   .status-left p { color: var(--mid); font-size: 13px; font-weight: 600; margin-top: 3px; }
@@ -166,13 +170,21 @@
     <div class="setup-card" id="openaiCard">
       <div>
         <h3>🎨 OpenAI API Key</h3>
-        <p>For DALL-E 3 Pixar-style image generation. platform.openai.com</p>
+        <p>For DALL-E 3 Pixar-style illustrations. platform.openai.com</p>
       </div>
       <div class="setup-row">
         <input class="setup-input" id="openaiKeyInput" type="password" placeholder="sk-..."/>
         <button class="btn btn-orange btn-sm" onclick="saveOpenAIKey()">Save</button>
       </div>
     </div>
+  </div>
+
+  <div class="history-banner" id="historyBanner" style="display:none">
+    <div>
+      <p id="historyLabel">📚 Avoiding recently used angles</p>
+      <span id="historyDetail"></span>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="clearHistory()">Clear history</button>
   </div>
 
   <div class="alert" id="noKeyAlert">Add your Anthropic API key above before generating posts.</div>
@@ -192,11 +204,11 @@
   <div class="gen-panel">
     <div>
       <h2>Generate this week's 3 posts</h2>
-      <p>Claude writes the copy. DALL-E 3 generates Pixar-style illustrations. You drop them into your template and post.</p>
+      <p>Claude writes fresh copy every time — never repeating recent angles or scenes.</p>
       <div class="gen-pills">
         <div class="pill pill-ig">📸 Instagram</div>
         <div class="pill pill-fb">👤 Facebook</div>
-        <div class="pill pill-dai">✨ Pixar-style DALL-E 3</div>
+        <div class="pill pill-dai">✨ Pixar · DALL-E 3</div>
       </div>
     </div>
     <button class="btn btn-white" id="genBtn" onclick="generateAll()">✦ Generate Posts</button>
@@ -205,7 +217,7 @@
   <div class="loading" id="mainLoading">
     <div class="spinner"></div>
     <p id="loadMsg">Claude is writing your 3 posts...</p>
-    <div class="loading-sub" id="loadSub">Crafting captions, image text and image prompts</div>
+    <div class="loading-sub" id="loadSub">Picking fresh angles from the full content pool</div>
     <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
   </div>
 
@@ -213,7 +225,7 @@
 
   <div class="empty" id="emptyState">
     <h2>Monday sorted in minutes</h2>
-    <p>Generate 3 posts, create Pixar-style images with DALL-E 3, drop them into your template, and post.</p>
+    <p>Generate 3 posts — Claude picks angles you haven't used recently and keeps the content fresh every week.</p>
     <button class="btn btn-orange" onclick="generateAll()">✦ Generate this week's posts</button>
   </div>
 
@@ -222,11 +234,64 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const PIXAR_STYLE = `Pixar-style 3D animated illustration. Warm cinematic lighting. Rounded expressive characters with big eyes and smooth skin. Rich saturated colours dominated by warm oranges, creams and soft whites. Depth of field with soft bokeh background. High quality render, no text in image.`;
+// ─── CONSTANTS ────────────────────────────────────────────────────────────────
+
+const PIXAR_STYLE = `Pixar-style 3D animated illustration. Warm cinematic lighting. Rounded expressive characters with big eyes and smooth skin. Rich saturated colours with warm oranges #E8622A, creams and soft whites. Depth of field with soft bokeh background. High quality render. No text in image.`;
+
+const HISTORY_KEY = 'sorted_post_history';
+const MAX_HISTORY = 12; // remember last 12 posts worth of angles/scenes
+
+// Full pool of content angles — Claude picks 3 that haven't been used recently
+const ANGLE_POOL = [
+  "Problem/Solution: parent misses an important school event because they didn't read the newsletter",
+  "Problem/Solution: parent is buried in school emails and can't find the date they need",
+  "Aspirational: parent feels totally on top of school life, never caught off guard",
+  "Aspirational: parent is the one other parents ask because they always know what's on",
+  "Relatable humour: the school newsletter is 6 pages long and nobody has time for that",
+  "Relatable humour: parent realises sports day was yesterday after already missing it",
+  "Feature spotlight: how the app reads PDFs, photos, and even screenshots",
+  "Feature spotlight: events go straight to Apple Calendar or Google Calendar, no app to open",
+  "Feature spotlight: works for multiple kids at different schools",
+  "Social proof style: imagine never missing another excursion, assembly, or mufti day",
+  "Before/after: the chaos of tracking school dates manually vs the calm of having Sorted",
+  "Question hook: how many school events did you miss last term",
+  "Question hook: when was the last time you actually read the whole newsletter",
+  "Seasonal: back to school — setting up the term with Sorted",
+  "Seasonal: end of term — the events that nearly got missed",
+  "Seasonal: school sports season — never miss a game or carnival again",
+  "Stat-led: the average school newsletter has 12 dates buried inside it",
+  "Community: for the parents who are doing everything and still somehow keeping up",
+  "Empathy: parenting is hard enough without admin on top of it",
+  "Trust/privacy: no account, no tracking, your newsletter never stored"
+];
+
+// Full pool of character scenes — Claude picks ones that haven't been used recently
+const SCENE_POOL = [
+  "stressed mum at kitchen bench surrounded by papers and a coffee going cold",
+  "happy mum smiling at her phone at the kitchen bench, kids eating breakfast behind her",
+  "dad doing the school run in the car, glancing at his phone at the lights",
+  "mum at the school front gate looking relieved, other parents chatting nearby",
+  "mum at her home office desk, phone next to laptop, looking organised and calm",
+  "frantic mum in the school car park looking at her phone with wide eyes",
+  "dad packing school bags in the hallway, looking flustered",
+  "mum sitting on the couch at night scrolling through a long PDF on her phone",
+  "mum at a school sports field, relaxed, watching a game with other parents",
+  "mum high-fiving her kid at the front door as they head off to school",
+  "single mum getting two kids ready in a small but warm kitchen",
+  "grandparent at school pickup checking their phone, looking pleased",
+  "mum in pyjamas at the kitchen bench having an early morning moment of calm",
+  "mum at a cafe table on her lunch break, quickly sorting school dates on her phone",
+  "dad at the supermarket, distracted, checking the school calendar on his phone",
+  "mum laughing at something on her phone while her kid reads next to her on the couch"
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
 
 let posts = [];
 let apiKey = localStorage.getItem('sorted_api_key') || '';
 let openaiKey = localStorage.getItem('sorted_openai_key') || '';
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
 
 const now = new Date();
 const mon = new Date(now);
@@ -235,6 +300,65 @@ document.getElementById('weekLbl').textContent = `Week of ${mon.toLocaleDateStri
 
 if (apiKey) { document.getElementById('apiKeyInput').value = apiKey; document.getElementById('apiCard').classList.add('saved'); }
 if (openaiKey) { document.getElementById('openaiKeyInput').value = openaiKey; document.getElementById('openaiCard').classList.add('saved'); }
+
+updateHistoryBanner();
+
+// ─── HISTORY ──────────────────────────────────────────────────────────────────
+
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch { return []; }
+}
+
+function saveToHistory(newPosts) {
+  const history = getHistory();
+  newPosts.forEach(p => {
+    history.push({ angle: p.angle_used, scene: p.scene_used, hook: p.hook, week: document.getElementById('weekLbl').textContent });
+  });
+  // Keep only the most recent MAX_HISTORY entries
+  const trimmed = history.slice(-MAX_HISTORY);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
+  updateHistoryBanner();
+}
+
+function clearHistory() {
+  localStorage.removeItem(HISTORY_KEY);
+  updateHistoryBanner();
+  toast('Content history cleared');
+}
+
+function updateHistoryBanner() {
+  const history = getHistory();
+  const banner = document.getElementById('historyBanner');
+  if (history.length === 0) { banner.style.display = 'none'; return; }
+  banner.style.display = 'flex';
+  document.getElementById('historyLabel').textContent = `📚 ${history.length} past posts in memory — Claude will avoid repeating these`;
+  const recent = history.slice(-3).map(h => h.hook).join(' · ');
+  document.getElementById('historyDetail').textContent = `Most recent: ${recent}`;
+}
+
+function getAvoidList() {
+  const history = getHistory();
+  if (!history.length) return '';
+  const angles = [...new Set(history.map(h => h.angle).filter(Boolean))];
+  const scenes = [...new Set(history.map(h => h.scene).filter(Boolean))];
+  const hooks = history.slice(-6).map(h => h.hook).filter(Boolean);
+  let avoid = '';
+  if (angles.length) avoid += `\nDo NOT use these angles again: ${angles.join('; ')}`;
+  if (scenes.length) avoid += `\nDo NOT use these character scenes again: ${scenes.join('; ')}`;
+  if (hooks.length) avoid += `\nDo NOT write hooks similar to these recent ones: ${hooks.join(' | ')}`;
+  return avoid;
+}
+
+// Pick random items from pool excluding recently used ones
+function pickFresh(pool, history, key, count) {
+  const used = new Set(history.map(h => h[key]).filter(Boolean));
+  const fresh = pool.filter(item => !used.has(item));
+  const source = fresh.length >= count ? fresh : pool; // fallback if pool exhausted
+  const shuffled = source.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
 
 function saveApiKey() {
   const v = document.getElementById('apiKeyInput').value.trim();
@@ -269,7 +393,7 @@ async function claudeAPI(prompt) {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
+      max_tokens: 1200,
       messages: [{ role: 'user', content: prompt }]
     })
   });
@@ -282,22 +406,15 @@ async function dalleGenerate(prompt) {
   const fullPrompt = `${PIXAR_STYLE} ${prompt}`;
   const res = await fetch('https://api.openai.com/v1/images/generations', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${openaiKey}`
-    },
-    body: JSON.stringify({
-      model: 'dall-e-3',
-      prompt: fullPrompt,
-      n: 1,
-      size: '1024x1024',
-      quality: 'standard'
-    })
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
+    body: JSON.stringify({ model: 'dall-e-3', prompt: fullPrompt, n: 1, size: '1024x1024', quality: 'standard' })
   });
   if (!res.ok) { const err = await res.json().catch(()=>({})); throw new Error(err?.error?.message || `OpenAI error ${res.status}`); }
   const data = await res.json();
   return data.data[0].url;
 }
+
+// ─── GENERATE ─────────────────────────────────────────────────────────────────
 
 async function generateAll() {
   if (!apiKey) { document.getElementById('noKeyAlert').classList.add('on'); return; }
@@ -310,31 +427,44 @@ async function generateAll() {
   loading.classList.add('on');
   document.getElementById('progFill').style.width = '10%';
   document.getElementById('loadMsg').textContent = 'Claude is writing your 3 posts...';
-  document.getElementById('loadSub').textContent = 'Crafting captions, image text and illustration prompts';
+  document.getElementById('loadSub').textContent = 'Picking fresh angles — checking history to avoid repeats';
+
+  // Pick 3 fresh angles and 3 fresh scenes from the pools
+  const history = getHistory();
+  const chosenAngles = pickFresh(ANGLE_POOL, history, 'angle', 3);
+  const chosenScenes = pickFresh(SCENE_POOL, history, 'scene', 3);
+  const avoidList = getAvoidList();
 
   try {
     const raw = await claudeAPI(`You are a senior social media strategist for Sorted — an iOS app that uses AI to read school newsletters and add every event to Apple Calendar or Google Calendar. No account needed. Built for busy Australian parents.
 
-Brand voice: warm, confident, slightly cheeky. Never corporate.
+Brand voice: warm, confident, slightly cheeky. Never corporate. Never salesy.
 Tagline: "AI reads the newsletter so you do not have to."
 Platforms: Instagram and Facebook. Square 1:1 format.
+${avoidList}
 
-Generate exactly 3 posts. Vary the angle: problem/solution, aspirational outcome, and relatable humour or feature spotlight. Mix tones.
+Generate exactly 3 posts using THESE SPECIFIC angles and scenes — do not deviate from them:
+
+Post 1: Angle — "${chosenAngles[0]}" | Scene — "${chosenScenes[0]}"
+Post 2: Angle — "${chosenAngles[1]}" | Scene — "${chosenScenes[1]}"
+Post 3: Angle — "${chosenAngles[2]}" | Scene — "${chosenScenes[2]}"
 
 For each post provide:
-1. Caption copy
-2. Image overlay text — max 6 words, bold and punchy, goes on the image in the template, no punctuation
-3. An image scene description for a Pixar-style 3D illustration. The subject is an Australian parent (90% female, 10% male), aged 28-42, with warm rounded Pixar character features. Scene matches post tone — stressed/overwhelmed for problem posts, happy/relieved/confident for solution posts. Morning school routine setting (kitchen, front door, school drop-off). Describe the character's expression, pose, and background scene in detail. No text in the image.
+1. Caption: hook (max 8 words, punchy, no trailing punctuation) + 2-3 sentence body (warm, direct, parent-friendly, soft call to action) + hashtags
+2. Image overlay text: max 6 words, bold and punchy, goes directly on the Pixar illustration, no punctuation
+3. Image scene: a Pixar-style 3D illustration description based on the assigned scene above. Rounded expressive character, warm brand colours, no text in image. 2-3 sentences.
 
 Respond ONLY with valid JSON. No markdown. No preamble:
 {"posts":[{
-  "type": "Problem/Solution",
-  "tone": "stressed",
-  "hook": "Max 8 words. Punchy. No trailing punctuation",
-  "caption": "2-3 sentences. Warm direct parent-friendly. Soft call to action.",
+  "angle_used": "exact angle string used",
+  "scene_used": "exact scene string used",
+  "type": "short label for the angle e.g. Problem/Solution",
+  "tone": "stressed or happy or confident",
+  "hook": "hook text",
+  "caption": "body sentences",
   "hashtags": "#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums",
-  "image_text": "Max 6 words. Punchy overlay text. No punctuation",
-  "image_scene": "Pixar character description and scene. Expression, pose, setting, mood. No text in image. 2-3 sentences."
+  "image_text": "max 6 words overlay text",
+  "image_scene": "Pixar illustration description"
 }]}`);
 
     document.getElementById('progFill').style.width = '85%';
@@ -344,13 +474,16 @@ Respond ONLY with valid JSON. No markdown. No preamble:
       imageUrl: null, imageLoading: false, imageError: null
     }));
 
+    // Save to history immediately so reruns this session also avoid repeats
+    saveToHistory(posts);
+
     await new Promise(r=>setTimeout(r,400));
     document.getElementById('progFill').style.width = '100%';
     setTimeout(()=>{
       loading.classList.remove('on');
       renderGrid(); updateStats();
       btn.disabled = false; btn.textContent = '↺ Regenerate';
-      toast(`${posts.length} posts ready`);
+      toast(`${posts.length} fresh posts ready`);
     }, 300);
 
   } catch(e) {
@@ -360,6 +493,8 @@ Respond ONLY with valid JSON. No markdown. No preamble:
     toast(`Error: ${e.message||'Check your API key and try again'}`);
   }
 }
+
+// ─── CARD RENDER ──────────────────────────────────────────────────────────────
 
 function renderGrid() {
   const g = document.getElementById('postsGrid');
@@ -421,7 +556,7 @@ function cardHTML(p,i) {
   if (p.imageLoading) {
     imageContent = `<div class="image-generating">
       <div class="spinner" style="width:28px;height:28px;margin:0;"></div>
-      <span>Generating your Pixar-style illustration...</span>
+      <span>Generating Pixar illustration...</span>
     </div>`;
   } else if (p.imageUrl) {
     imageContent = `<img class="generated-img" src="${p.imageUrl}" alt="Generated image"/>
@@ -432,13 +567,11 @@ function cardHTML(p,i) {
   } else {
     imageContent = `<div class="image-placeholder">
       <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="2" y="2" width="36" height="36" rx="7" stroke="#E8622A" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="13" cy="14" r="4" fill="#E8622A" opacity="0.3"/><path d="M2 28 L12 17 L21 25 L28 18 L38 28" stroke="#E8622A" stroke-width="2" opacity="0.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>${!openaiKey ? 'Add your OpenAI key above to generate images' : 'Pixar-style illustration ready to generate'}</span>
+      <span>${!openaiKey?'Add your OpenAI key above to generate images':'Pixar-style illustration ready to generate'}</span>
     </div>
-    ${openaiKey ? `<div class="image-actions"><button class="btn btn-orange btn-sm" style="width:100%;justify-content:center;" onclick="generateImage(${i})">✨ Generate Pixar Image</button></div>` : ''}`;
+    ${openaiKey?`<div class="image-actions"><button class="btn btn-orange btn-sm" style="width:100%;justify-content:center;" onclick="generateImage(${i})">✨ Generate Pixar Image</button></div>`:''}`;
   }
-  if (p.imageError) {
-    imageContent += `<div style="font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">${p.imageError}</div>`;
-  }
+  if (p.imageError) imageContent += `<div style="font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">${p.imageError}</div>`;
 
   const imageSection = `<div class="image-section">
     <div class="section-label">Image <span class="badge" style="background:rgba(16,163,127,0.12);color:#10A37F;">Pixar · DALL-E 3</span></div>
@@ -468,20 +601,19 @@ function cardHTML(p,i) {
   return header + copy + imgtext + imageSection + promptSection + footer;
 }
 
+// ─── ACTIONS ──────────────────────────────────────────────────────────────────
+
 async function generateImage(i) {
   if (!openaiKey) { toast('Add your OpenAI key first'); return; }
   posts[i].imageLoading = true; posts[i].imageError = null; refreshCard(i);
   try {
     const url = await dalleGenerate(posts[i].image_scene);
-    posts[i].imageUrl = url;
-    posts[i].imageLoading = false;
-    refreshCard(i);
-    toast('Pixar image ready — click Download to save');
+    posts[i].imageUrl = url; posts[i].imageLoading = false;
+    refreshCard(i); toast('Pixar image ready — click Download to save');
   } catch(e) {
     posts[i].imageLoading = false;
     posts[i].imageError = `Image failed: ${e.message}`;
-    refreshCard(i);
-    toast(`Image error: ${e.message}`);
+    refreshCard(i); toast(`Image error: ${e.message}`);
   }
 }
 
@@ -491,21 +623,21 @@ async function regenCopy(i) {
   try {
     const raw = await claudeAPI(`You are a social media strategist for Sorted — an iOS app that reads school newsletters with AI and adds every event to Apple Calendar or Google Calendar. Built for busy Australian parents. Brand voice: warm, confident, slightly cheeky.
 
-Write ONE new post with a fresh angle. Previous hook was: "${posts[i].hook}" — write something different.
+Write ONE new post. The previous hook was: "${posts[i].hook}" — write something with a completely different angle and energy.
 
-Also write:
-- Image overlay text: max 6 words, punchy, no punctuation
-- Image scene: a Pixar-style 3D illustration scene description. Australian parent (90% female, 10% male), 28-42, morning school routine, expression and pose matching tone, warm colours, no text in image. 2-3 sentences.
+Also write new image overlay text (max 6 words, punchy, no punctuation) and a new Pixar-style 3D illustration scene description (Australian parent, warm brand colours, no text in image, 2-3 sentences).
 
 Respond ONLY with valid JSON, no markdown:
 {
-  "type": "${posts[i].type}",
+  "angle_used": "brief angle description",
+  "scene_used": "brief scene description",
+  "type": "short label",
   "tone": "stressed or happy or confident",
-  "hook": "Max 8 words. Fresh angle. No trailing punctuation",
-  "caption": "2-3 sentences. Warm and direct. Soft call to action.",
+  "hook": "max 8 words, no trailing punctuation",
+  "caption": "2-3 sentences, warm and direct, soft call to action",
   "hashtags": "#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums",
-  "image_text": "Max 6 words. Punchy overlay text. No punctuation",
-  "image_scene": "Pixar-style scene description. No text in image. 2-3 sentences."
+  "image_text": "max 6 words, no punctuation",
+  "image_scene": "Pixar illustration scene. No text. 2-3 sentences."
 }`);
     const p2 = JSON.parse(raw.replace(/```json|```/g,'').trim());
     posts[i] = { ...posts[i], ...p2, regenLoading: false, imageUrl: null, imageError: null };
@@ -522,9 +654,9 @@ function copyCopy(i) {
 function copyImageText(i) { navigator.clipboard.writeText(posts[i].image_text||'').then(()=>toast('Image text copied')); }
 function copyPrompt(i) { navigator.clipboard.writeText(posts[i].image_scene||'').then(()=>toast('Scene description copied')); }
 function setStatus(i,s) {
-  posts[i].status = s; refreshCard(i); updateStats();
-  if (s==='done') toast('✓ Marked as done');
-  if (s==='skipped') toast('Post skipped');
+  posts[i].status=s; refreshCard(i); updateStats();
+  if(s==='done') toast('✓ Marked as done');
+  if(s==='skipped') toast('Post skipped');
 }
 </script>
 </body>
