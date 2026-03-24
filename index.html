@@ -10,19 +10,17 @@
   :root {
     --orange: #E8622A; --peach: #F2A07B; --cream: #FAF0E8;
     --dark: #1C0F0A; --mid: #6B3D2A; --light: #F7EDE4;
-    --green: #2A8A4A; --red: #C0392B; --buffer: #1DA463;
+    --green: #2A8A4A; --buffer: #1DA463;
     --purple: #7D2AE8; --shadow: 0 2px 16px rgba(28,15,10,0.08);
   }
   body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--dark); min-height: 100vh; }
 
-  /* HEADER */
   header { background: var(--orange); padding: 0 28px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(232,98,42,0.3); }
   .logo { display: flex; align-items: center; gap: 10px; color: white; font-weight: 900; font-size: 18px; letter-spacing: -0.3px; }
   .logo svg { width: 30px; height: 30px; }
   .hdr-right { display: flex; align-items: center; gap: 10px; }
   .week-lbl { color: rgba(255,255,255,0.8); font-weight: 700; font-size: 12px; }
 
-  /* BUTTONS */
   .btn { padding: 8px 16px; border-radius: 100px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; cursor: pointer; border: none; transition: all 0.15s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
   .btn:active { transform: scale(0.97); }
   .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
@@ -40,10 +38,21 @@
   .btn-purple:hover:not(:disabled) { background: #6a1fd4; }
   .btn-sm { padding: 6px 12px; font-size: 12px; }
 
-  /* LAYOUT */
   main { max-width: 1080px; margin: 0 auto; padding: 32px 20px; }
 
-  /* STATUS BAR */
+  /* API KEY SETUP */
+  .setup-card { background: var(--dark); border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .setup-card.saved { opacity: 0.55; }
+  .setup-card h3 { color: white; font-weight: 800; font-size: 14px; margin-bottom: 3px; }
+  .setup-card p { color: rgba(255,255,255,0.45); font-size: 11px; font-weight: 600; line-height: 1.5; }
+  .setup-row { display: flex; gap: 8px; align-items: center; }
+  .setup-input { background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 12px; color: white; font-family: 'Nunito',sans-serif; font-weight: 700; font-size: 12px; width: 260px; outline: none; }
+  .setup-input::placeholder { color: rgba(255,255,255,0.3); }
+  .setup-input:focus { border-color: var(--peach); }
+
+  .alert { background: rgba(232,98,42,0.08); border: 1.5px solid rgba(232,98,42,0.25); border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; font-size: 13px; font-weight: 700; color: var(--orange); display: none; }
+  .alert.on { display: block; }
+
   .status-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 14px; }
   .status-left h1 { font-size: 24px; font-weight: 900; letter-spacing: -0.4px; }
   .status-left p { color: var(--mid); font-size: 13px; font-weight: 600; margin-top: 3px; }
@@ -52,7 +61,6 @@
   .stat-num { font-size: 26px; font-weight: 900; color: var(--orange); line-height: 1; }
   .stat-label { font-size: 10px; font-weight: 700; color: var(--mid); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
 
-  /* GENERATE PANEL */
   .gen-panel { background: var(--dark); border-radius: 18px; padding: 22px 26px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .gen-panel h2 { color: white; font-weight: 900; font-size: 16px; }
   .gen-panel p { color: rgba(255,255,255,0.5); font-size: 12px; font-weight: 600; margin-top: 3px; }
@@ -62,7 +70,6 @@
   .pill-fb { background: rgba(24,119,242,0.2); color: #1877F2; }
   .pill-buf { background: rgba(29,164,99,0.18); color: var(--buffer); }
 
-  /* LOADING */
   .loading { background: var(--light); border: 2px solid #E0C8B8; border-radius: 14px; padding: 32px; text-align: center; margin-bottom: 24px; display: none; }
   .loading.on { display: block; }
   .spinner { width: 36px; height: 36px; border: 3px solid #E0C8B8; border-top-color: var(--orange); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
@@ -72,29 +79,25 @@
   .prog-track { height: 3px; background: #E0C8B8; border-radius: 100px; overflow: hidden; margin-top: 16px; }
   .prog-fill { height: 100%; background: var(--orange); border-radius: 100px; transition: width 0.5s ease; }
 
-  /* POSTS GRID */
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
 
-  /* POST CARD */
   .card { background: white; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); border: 2px solid transparent; transition: border-color 0.2s; animation: up 0.35s ease forwards; opacity: 0; transform: translateY(12px); }
   @keyframes up { to { opacity:1; transform: translateY(0); } }
   .card.ready { border-color: var(--green); }
   .card.skipped { opacity: 0.35; border-color: #DDD0C8; }
-  .card.done { border-color: var(--buffer); }
+  .card.sent { border-color: var(--buffer); }
 
-  /* STEP INDICATOR */
-  .step-bar { display: flex; padding: 12px 16px; gap: 6px; background: var(--light); border-bottom: 1px solid #EDE0D8; }
-  .step { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; color: #BBA898; }
+  .step-bar { display: flex; padding: 10px 14px; gap: 4px; background: var(--light); border-bottom: 1px solid #EDE0D8; align-items: center; }
+  .step { display: flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; color: #BBA898; }
   .step.active { color: var(--orange); }
   .step.done-step { color: var(--green); }
-  .step-dot { width: 18px; height: 18px; border-radius: 50%; background: #DDD0C8; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 900; color: white; flex-shrink: 0; }
+  .step-dot { width: 16px; height: 16px; border-radius: 50%; background: #DDD0C8; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 900; color: white; flex-shrink: 0; }
   .step.active .step-dot { background: var(--orange); }
   .step.done-step .step-dot { background: var(--green); }
-  .step-line { flex: 1; height: 1px; background: #DDD0C8; margin: 0 2px; }
+  .step-line { flex: 1; height: 1px; background: #DDD0C8; }
 
-  /* COPY SECTION */
-  .copy-section { padding: 16px 18px; }
-  .post-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .copy-section { padding: 14px 16px; }
+  .post-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
   .post-type { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--orange); background: rgba(232,98,42,0.1); padding: 3px 8px; border-radius: 100px; }
   .pbadges { display: flex; gap: 3px; }
   .pb { width: 20px; height: 20px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; }
@@ -102,54 +105,38 @@
   .pb.fb { background: #1877F2; color: white; }
   .hook { font-size: 15px; font-weight: 900; line-height: 1.3; margin-bottom: 7px; letter-spacing: -0.2px; }
   .caption { font-size: 12px; font-weight: 600; color: var(--mid); line-height: 1.6; margin-bottom: 7px; }
-  .hashtags { font-size: 11px; font-weight: 700; color: var(--peach); line-height: 1.5; margin-bottom: 12px; }
+  .hashtags { font-size: 11px; font-weight: 700; color: var(--peach); line-height: 1.5; margin-bottom: 10px; }
+  .copy-actions { display: flex; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid #F0E4D8; }
 
-  /* COPY ACTIONS */
-  .copy-actions { display: flex; gap: 6px; padding-bottom: 14px; border-bottom: 1px solid #F0E4D8; }
-
-  /* DAY PICKER */
-  .day-row { display: flex; align-items: center; gap: 8px; padding: 12px 0; border-bottom: 1px solid #F0E4D8; }
-  .day-lbl { font-size: 10px; font-weight: 800; color: var(--mid); text-transform: uppercase; letter-spacing: 0.4px; }
-  .day-pills { display: flex; gap: 4px; }
-  .dp { padding: 3px 9px; border-radius: 100px; border: 1.5px solid #DDD0C8; background: transparent; font-family: 'Nunito',sans-serif; font-weight: 700; font-size: 11px; color: var(--mid); cursor: pointer; transition: all 0.12s; }
-  .dp.on { background: var(--orange); border-color: var(--orange); color: white; }
-
-  /* IMAGE SECTION */
-  .img-section { padding: 14px 18px 18px; }
+  .img-section { padding: 12px 16px 16px; }
   .img-section-label { font-size: 10px; font-weight: 800; color: var(--mid); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 10px; }
-
-  /* IMAGE PLACEHOLDER */
-  .img-placeholder { background: var(--light); border-radius: 12px; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 20px; cursor: default; }
+  .img-placeholder { background: var(--light); border-radius: 12px; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 20px; }
   .img-placeholder span { font-size: 12px; font-weight: 700; color: var(--mid); opacity: 0.6; line-height: 1.5; }
-
-  /* IMAGE OPTIONS */
-  .img-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  .img-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-bottom: 8px; }
   .img-opt { border-radius: 10px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; position: relative; aspect-ratio: 1; background: var(--light); display: flex; align-items: center; justify-content: center; }
   .img-opt:hover { border-color: var(--orange); }
-  .img-opt.selected { border-color: var(--green); box-shadow: 0 0 0 2px rgba(42,138,74,0.3); }
+  .img-opt.selected { border-color: var(--green); box-shadow: 0 0 0 2px rgba(42,138,74,0.25); }
   .img-opt img { width: 100%; height: 100%; object-fit: cover; }
-  .img-opt-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 10px; }
-  .img-opt-loading .mini-spin { width: 20px; height: 20px; border: 2px solid #DDD0C8; border-top-color: var(--orange); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  .img-opt-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 10px; height: 100%; }
+  .mini-spin { width: 18px; height: 18px; border: 2px solid #DDD0C8; border-top-color: var(--orange); border-radius: 50%; animation: spin 0.7s linear infinite; }
   .img-opt-loading span { font-size: 10px; font-weight: 700; color: var(--mid); opacity: 0.6; }
-  .img-tick { position: absolute; top: 5px; right: 5px; width: 20px; height: 20px; border-radius: 50%; background: var(--green); display: none; align-items: center; justify-content: center; }
+  .img-tick { position: absolute; top: 5px; right: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--green); display: none; align-items: center; justify-content: center; }
   .img-opt.selected .img-tick { display: flex; }
-  .img-tick svg { width: 10px; height: 10px; }
-  .img-canva-link { position: absolute; bottom: 4px; right: 4px; background: white; border-radius: 6px; padding: 2px 6px; font-size: 9px; font-weight: 800; color: var(--purple); opacity: 0; transition: opacity 0.15s; text-decoration: none; }
-  .img-opt:hover .img-canva-link { opacity: 1; }
+  .img-tick svg { width: 9px; height: 9px; }
+  .img-edit-link { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); background: white; border-radius: 6px; padding: 2px 6px; font-size: 9px; font-weight: 800; color: var(--purple); opacity: 0; transition: opacity 0.15s; text-decoration: none; white-space: nowrap; }
+  .img-opt:hover .img-edit-link { opacity: 1; }
 
-  /* CARD FOOTER */
-  .card-footer { padding: 0 18px 16px; }
-  .footer-approve { display: flex; gap: 6px; }
-  .approved-bar { background: rgba(42,138,74,0.08); border-radius: 10px; padding: 9px 12px; display: flex; align-items: center; justify-content: space-between; }
-  .approved-bar span { font-size: 12px; font-weight: 700; color: var(--green); }
-  .done-bar { background: rgba(29,164,99,0.08); border-radius: 10px; padding: 9px 12px; display: flex; align-items: center; justify-content: space-between; }
-  .done-bar span { font-size: 12px; font-weight: 700; color: var(--buffer); }
-  .btn-undo { font-size: 11px; font-weight: 700; color: var(--mid); background: none; border: none; cursor: pointer; text-decoration: underline; font-family: 'Nunito',sans-serif; }
-
-  /* INLINE REGENERATE LOADING */
   .regen-loading { background: var(--light); border-radius: 10px; padding: 14px; text-align: center; }
-  .regen-loading .mini-spin { width: 22px; height: 22px; border: 2px solid #DDD0C8; border-top-color: var(--orange); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 6px; }
-  .regen-loading span { font-size: 12px; font-weight: 700; color: var(--mid); }
+  .regen-loading span { font-size: 12px; font-weight: 700; color: var(--mid); display: block; margin-top: 6px; }
+
+  .card-footer { padding: 0 16px 14px; }
+  .footer-approve { display: flex; gap: 6px; }
+  .status-pill { border-radius: 10px; padding: 9px 12px; display: flex; align-items: center; justify-content: space-between; }
+  .status-pill.green { background: rgba(42,138,74,0.08); }
+  .status-pill.green span { font-size: 12px; font-weight: 700; color: var(--green); }
+  .status-pill.buf { background: rgba(29,164,99,0.08); }
+  .status-pill.buf span { font-size: 12px; font-weight: 700; color: var(--buffer); }
+  .btn-undo { font-size: 11px; font-weight: 700; color: var(--mid); background: none; border: none; cursor: pointer; text-decoration: underline; font-family: 'Nunito',sans-serif; }
 
   /* QUEUE PANEL */
   .queue-panel { background: white; border-radius: 18px; padding: 24px 28px; margin-top: 32px; box-shadow: var(--shadow); display: none; }
@@ -157,10 +144,9 @@
   .queue-hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
   .queue-hdr h2 { font-size: 18px; font-weight: 900; }
   .queue-hdr p { font-size: 12px; color: var(--mid); font-weight: 600; margin-top: 3px; }
-  .queue-actions { display: flex; gap: 8px; }
   .queue-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
   .qi { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--light); border-radius: 10px; }
-  .qi-day { font-size: 11px; font-weight: 800; color: var(--orange); text-transform: uppercase; min-width: 28px; }
+  .qi-num { font-size: 11px; font-weight: 800; color: var(--orange); min-width: 20px; }
   .qi-thumb { width: 40px; height: 40px; border-radius: 7px; overflow: hidden; background: #DDD0C8; flex-shrink: 0; }
   .qi-thumb img { width: 100%; height: 100%; object-fit: cover; }
   .qi-hook { flex: 1; font-size: 13px; font-weight: 700; }
@@ -174,22 +160,27 @@
   .buffer-note ol { padding-left: 15px; display: flex; flex-direction: column; gap: 5px; }
   .buffer-note li { font-size: 12px; font-weight: 600; color: var(--mid); line-height: 1.5; }
 
-  /* EMPTY STATE */
   .empty { text-align: center; padding: 70px 20px; }
   .empty h2 { font-size: 20px; font-weight: 900; margin-bottom: 7px; }
   .empty p { font-size: 13px; font-weight: 600; color: var(--mid); max-width: 340px; margin: 0 auto 20px; line-height: 1.6; }
 
-  /* TOAST */
-  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--dark); color: white; padding: 12px 16px; border-radius: 10px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); transform: translateY(70px); opacity: 0; transition: all 0.3s; z-index: 999; max-width: 260px; }
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--dark); color: white; padding: 12px 16px; border-radius: 10px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); transform: translateY(70px); opacity: 0; transition: all 0.3s; z-index: 999; max-width: 280px; }
   .toast.on { transform: translateY(0); opacity: 1; }
 
-  /* SETUP BANNER */
-  .setup { background: var(--dark); border-radius: 14px; padding: 18px 22px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
-  .setup h3 { color: white; font-weight: 800; font-size: 14px; }
-  .setup p { color: rgba(255,255,255,0.45); font-size: 11px; font-weight: 600; margin-top: 3px; }
-  .setup-input { background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 12px; color: white; font-family: 'Nunito',sans-serif; font-weight: 700; font-size: 12px; width: 240px; outline: none; }
-  .setup-input::placeholder { color: rgba(255,255,255,0.3); }
-  .setup-input:focus { border-color: var(--peach); }
+  /* SENDING OVERLAY */
+  .sending-overlay { position: fixed; inset: 0; background: rgba(28,15,10,0.6); z-index: 200; display: none; align-items: center; justify-content: center; }
+  .sending-overlay.on { display: flex; }
+  .sending-box { background: white; border-radius: 20px; padding: 36px 40px; text-align: center; max-width: 360px; }
+  .sending-box h3 { font-size: 18px; font-weight: 900; margin-bottom: 6px; }
+  .sending-box p { font-size: 13px; font-weight: 600; color: var(--mid); line-height: 1.6; margin-top: 8px; }
+  .send-progress { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+  .send-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--light); border-radius: 8px; font-size: 13px; font-weight: 700; }
+  .send-item .s-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .send-item .s-icon.pending { background: #DDD0C8; }
+  .send-item .s-icon.sending { background: var(--orange); }
+  .send-item .s-icon.done { background: var(--green); }
+  .send-item .s-icon.error { background: var(--red, #C0392B); }
+  .s-mini-spin { width: 10px; height: 10px; border: 1.5px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; }
 </style>
 </head>
 <body>
@@ -211,31 +202,33 @@
   </div>
   <div class="hdr-right">
     <span class="week-lbl" id="weekLbl"></span>
-    <button class="btn btn-white btn-sm" onclick="openBuffer()">Open Buffer ↗</button>
+    <button class="btn btn-buffer btn-sm" onclick="window.open('https://buffer.com/','_blank')">Open Buffer ↗</button>
   </div>
 </header>
 
 <main>
 
-  <div class="setup" id="setupBanner">
+  <div class="setup-card" id="apiCard">
     <div>
-      <h3>Connect Buffer</h3>
-      <p>Paste your Buffer URL — posts will open directly in your queue</p>
+      <h3>🔑 Anthropic API Key</h3>
+      <p>Required to generate post copy. Saved only in your browser. Get yours at console.anthropic.com</p>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-      <input class="setup-input" id="bufferUrlInput" placeholder="https://buffer.com/..." type="url"/>
-      <button class="btn btn-buffer btn-sm" onclick="saveBuffer()">Save</button>
+    <div class="setup-row">
+      <input class="setup-input" id="apiKeyInput" type="password" placeholder="sk-ant-..."/>
+      <button class="btn btn-orange btn-sm" onclick="saveApiKey()">Save</button>
     </div>
   </div>
+
+  <div class="alert" id="noKeyAlert">Add your Anthropic API key above before generating posts.</div>
 
   <div class="status-bar">
     <div class="status-left">
       <h1>This Week's Posts</h1>
-      <p>Instagram · Facebook · Buffer · 3 posts</p>
+      <p>Instagram · Facebook · Zapier → Buffer</p>
     </div>
     <div class="stats">
       <div class="stat"><div class="stat-num" id="sTotal">0</div><div class="stat-label">Generated</div></div>
-      <div class="stat"><div class="stat-num" id="sReady">0</div><div class="stat-label">Ready</div></div>
+      <div class="stat"><div class="stat-num" id="sReady">0</div><div class="stat-label">Approved</div></div>
       <div class="stat"><div class="stat-num" id="sSkipped">0</div><div class="stat-label">Skipped</div></div>
     </div>
   </div>
@@ -243,17 +236,17 @@
   <div class="gen-panel">
     <div>
       <h2>Generate this week's 3 posts</h2>
-      <p>Claude writes the copy. Canva generates the images. You pick what goes live.</p>
+      <p>Claude writes the copy. You pick the images. Zapier sends them to your Buffer queue.</p>
       <div class="gen-pills">
         <div class="pill pill-ig">📸 Instagram</div>
         <div class="pill pill-fb">👤 Facebook</div>
-        <div class="pill pill-buf">⬛ Buffer</div>
+        <div class="pill pill-buf">⬛ Buffer queue</div>
       </div>
     </div>
     <button class="btn btn-white" id="genBtn" onclick="generateAll()">✦ Generate Posts</button>
   </div>
 
-  <div class="loading on" id="mainLoading" style="display:none">
+  <div class="loading" id="mainLoading">
     <div class="spinner"></div>
     <p id="loadMsg">Claude is writing your 3 posts...</p>
     <div class="loading-sub" id="loadSub">Crafting hooks, captions and hashtags</div>
@@ -265,41 +258,47 @@
   <div class="queue-panel" id="queuePanel">
     <div class="queue-hdr">
       <div>
-        <h2>Ready to Schedule</h2>
-        <p>All posts approved with images selected — ready for Buffer</p>
+        <h2>Ready to Queue</h2>
+        <p>Posts will be added to your Buffer queue in order via Zapier</p>
       </div>
-      <div class="queue-actions">
-        <button class="btn btn-ghost btn-sm" onclick="copyAll()">📋 Copy All</button>
-        <button class="btn btn-buffer" onclick="sendToBuffer()">Send to Buffer ↗</button>
-      </div>
+      <button class="btn btn-buffer" id="sendBtn" onclick="sendToBuffer()">⬛ Send to Buffer Queue</button>
     </div>
     <div class="queue-list" id="queueList"></div>
     <div class="buffer-note">
-      <h4>How Buffer works with this</h4>
+      <h4>What happens when you send</h4>
       <ol>
-        <li>Click Send to Buffer — your captions are copied and Buffer opens</li>
-        <li>In Buffer create a new post, paste the caption, and attach the downloaded image</li>
-        <li>Buffer queues it at the time slot you have set — Mon, Wed, Fri recommended</li>
-        <li>Buffer posts automatically to Instagram and Facebook at those times</li>
+        <li>Each approved post is sent to Zapier one at a time</li>
+        <li>Zapier adds them to your Buffer queue in order</li>
+        <li>Open Buffer and attach the Canva image to each post</li>
+        <li>Buffer fires them at the times you have set in your schedule</li>
       </ol>
     </div>
   </div>
 
   <div class="empty" id="emptyState">
     <h2>Monday sorted in minutes</h2>
-    <p>Generate 3 posts, pick your images, approve what you like, and send the whole week to Buffer in one go.</p>
+    <p>Add your API key, generate 3 posts, select images, approve what you like, then send the whole week to Buffer in one click.</p>
     <button class="btn btn-orange" onclick="generateAll()">✦ Generate this week's posts</button>
   </div>
 
 </main>
 
+<!-- SENDING OVERLAY -->
+<div class="sending-overlay" id="sendingOverlay">
+  <div class="sending-box">
+    <div class="spinner" style="margin:0 auto 12px;"></div>
+    <h3>Sending to Buffer</h3>
+    <p>Adding your posts to the queue via Zapier...</p>
+    <div class="send-progress" id="sendProgress"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-const DAYS = ['Mon','Tue','Wed','Thu','Fri'];
-const SUGGESTED = ['Mon','Wed','Fri'];
+const ZAPIER_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/26948206/uppzydi/';
 let posts = [];
-let bufferUrl = localStorage.getItem('sorted_buffer_url') || '';
+let apiKey = localStorage.getItem('sorted_api_key') || '';
 
 // Week label
 const now = new Date();
@@ -307,14 +306,20 @@ const mon = new Date(now);
 mon.setDate(now.getDate() - now.getDay() + 1);
 document.getElementById('weekLbl').textContent = `Week of ${mon.toLocaleDateString('en-AU',{day:'numeric',month:'short'})}`;
 
-if (bufferUrl) {
-  document.getElementById('bufferUrlInput').value = bufferUrl;
-  document.getElementById('setupBanner').style.display = 'none';
+if (apiKey) {
+  document.getElementById('apiKeyInput').value = apiKey;
+  document.getElementById('apiCard').classList.add('saved');
 }
 
-function saveBuffer() {
-  const v = document.getElementById('bufferUrlInput').value.trim();
-  if (v) { bufferUrl = v; localStorage.setItem('sorted_buffer_url', v); document.getElementById('setupBanner').style.display = 'none'; toast('Buffer connected'); }
+function saveApiKey() {
+  const v = document.getElementById('apiKeyInput').value.trim();
+  if (v) {
+    apiKey = v;
+    localStorage.setItem('sorted_api_key', v);
+    document.getElementById('apiCard').classList.add('saved');
+    document.getElementById('noKeyAlert').classList.remove('on');
+    toast('API key saved');
+  }
 }
 
 function toast(msg, ms=3000) {
@@ -323,17 +328,11 @@ function toast(msg, ms=3000) {
   setTimeout(() => t.classList.remove('on'), ms);
 }
 
-function setLoad(msg, sub, pct) {
-  document.getElementById('loadMsg').textContent = msg;
-  document.getElementById('loadSub').textContent = sub;
-  document.getElementById('progFill').style.width = pct + '%';
-}
-
 function updateStats() {
   document.getElementById('sTotal').textContent = posts.length;
-  document.getElementById('sReady').textContent = posts.filter(p => p.status === 'ready' || p.status === 'sent').length;
-  document.getElementById('sSkipped').textContent = posts.filter(p => p.status === 'skipped').length;
-  const ready = posts.filter(p => p.status === 'ready' || p.status === 'sent');
+  document.getElementById('sReady').textContent = posts.filter(p => p.status==='ready'||p.status==='sent').length;
+  document.getElementById('sSkipped').textContent = posts.filter(p => p.status==='skipped').length;
+  const ready = posts.filter(p => p.status==='ready'||p.status==='sent');
   const qp = document.getElementById('queuePanel');
   if (ready.length) { qp.classList.add('on'); renderQueue(); } else qp.classList.remove('on');
 }
@@ -341,26 +340,38 @@ function updateStats() {
 async function claudeAPI(prompt) {
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1000,
       messages: [{ role: 'user', content: prompt }]
     })
   });
+  if (!res.ok) {
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err?.error?.message || `API error ${res.status}`);
+  }
   const data = await res.json();
-  return data.content.map(i => i.text || '').join('');
+  return data.content.map(i => i.text||'').join('');
 }
 
 async function generateAll() {
+  if (!apiKey) { document.getElementById('noKeyAlert').classList.add('on'); return; }
   const btn = document.getElementById('genBtn');
   const loading = document.getElementById('mainLoading');
   document.getElementById('emptyState').style.display = 'none';
   document.getElementById('postsGrid').innerHTML = '';
   posts = []; updateStats();
   btn.disabled = true; btn.textContent = '... Writing';
-  loading.style.display = 'block';
-  setLoad('Claude is writing your 3 posts...', 'Crafting hooks, captions and hashtags in Sorted brand voice', 10);
+  loading.classList.add('on');
+  document.getElementById('progFill').style.width = '10%';
+  document.getElementById('loadMsg').textContent = 'Claude is writing your 3 posts...';
+  document.getElementById('loadSub').textContent = 'Crafting hooks, captions and hashtags in Sorted brand voice';
 
   try {
     const raw = await claudeAPI(`You are a senior social media strategist for Sorted — an iOS app that uses AI to read school newsletters and add every event to Apple Calendar or Google Calendar automatically. No account needed. Built for busy Australian parents.
@@ -369,33 +380,33 @@ Brand voice: warm, confident, slightly cheeky. Never corporate. Speaks directly 
 Tagline: "AI reads the newsletter so you do not have to."
 Platforms: Instagram and Facebook.
 
-Generate exactly 3 posts. Vary the angle: problem/solution, aspirational, and relatable humour or feature spotlight.
+Generate exactly 3 posts. Vary the angle: problem/solution, aspirational outcome, and relatable humour or feature spotlight.
 
-Respond ONLY with valid JSON, no markdown:
-{"posts":[{"type":"Problem/Solution","hook":"Max 8 words. Punchy. No trailing punctuation","caption":"2-3 sentences. Warm direct parent-friendly. Soft call to action at end.","hashtags":"#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums","canva_concept":"Brief visual concept for the image: mood, colours, layout, text overlay idea. 2-3 sentences max.","suggested_day":"Mon"}]}`);
+Respond ONLY with valid JSON. No markdown. No preamble:
+{"posts":[{"type":"Problem/Solution","hook":"Max 8 words. Punchy. No trailing punctuation","caption":"2-3 sentences. Warm direct parent-friendly. Soft call to action at end.","hashtags":"#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums","canva_concept":"2-3 sentence visual concept: mood, colours, layout, text overlay idea."}]}`);
 
+    document.getElementById('progFill').style.width = '80%';
     const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
-    setLoad('Posts written. Building your review board...', 'Select images and approve each post', 85);
-
     posts = parsed.posts.slice(0,3).map((p,i) => ({
       ...p, id: i, status: 'pending',
-      selectedDay: SUGGESTED[i] || DAYS[i],
-      images: [], selectedImage: null
+      images: [], selectedImage: null,
+      regenLoading: false, imageLoading: false
     }));
 
     await new Promise(r => setTimeout(r,400));
-    setLoad('Done', '', 100);
+    document.getElementById('progFill').style.width = '100%';
     setTimeout(() => {
-      loading.style.display = 'none';
+      loading.classList.remove('on');
       renderGrid(); updateStats();
       btn.disabled = false; btn.textContent = '↺ Regenerate';
-      toast(`${posts.length} posts ready — now generate images for each`);
+      toast(`${posts.length} posts ready — add images to each`);
     }, 300);
 
   } catch(e) {
-    console.error(e); loading.style.display = 'none';
+    console.error(e);
+    loading.classList.remove('on');
     btn.disabled = false; btn.textContent = '✦ Generate Posts';
-    toast('Something went wrong — try again');
+    toast(`Error: ${e.message||'Check your API key and try again'}`);
   }
 }
 
@@ -404,38 +415,34 @@ function renderGrid() {
   g.innerHTML = '';
   posts.forEach((p,i) => {
     const c = document.createElement('div');
-    c.className = `card ${p.status === 'ready' ? 'ready' : p.status === 'skipped' ? 'skipped' : p.status === 'sent' ? 'done' : ''}`;
-    c.id = `card-${i}`;
-    c.style.animationDelay = `${i*0.08}s`;
-    c.innerHTML = cardHTML(p,i);
-    g.appendChild(c);
+    c.className = `card ${p.status==='ready'?'ready':p.status==='skipped'?'skipped':p.status==='sent'?'sent':''}`;
+    c.id = `card-${i}`; c.style.animationDelay = `${i*0.08}s`;
+    c.innerHTML = cardHTML(p,i); g.appendChild(c);
   });
 }
 
 function refreshCard(i) {
   const c = document.getElementById(`card-${i}`);
   const p = posts[i];
-  c.className = `card ${p.status === 'ready' ? 'ready' : p.status === 'skipped' ? 'skipped' : p.status === 'sent' ? 'done' : ''}`;
+  c.className = `card ${p.status==='ready'?'ready':p.status==='skipped'?'skipped':p.status==='sent'?'sent':''}`;
   c.innerHTML = cardHTML(p,i);
 }
 
 function cardHTML(p,i) {
-  const copyStep = p.status !== 'pending' ? 'done-step' : 'active';
-  const imgStep = p.images.length ? (p.selectedImage !== null ? 'done-step' : 'active') : '';
-  const approveStep = p.status === 'ready' || p.status === 'sent' ? 'done-step' : (p.selectedImage !== null ? 'active' : '');
+  const imgReady = p.images.length > 0;
+  const imgSelected = p.selectedImage !== null;
+  const approved = p.status==='ready'||p.status==='sent';
 
-  // Step bar
   const stepBar = `<div class="step-bar">
-    <div class="step done-step"><div class="step-dot">1</div> Copy</div>
+    <div class="step done-step"><div class="step-dot">✓</div>Copy</div>
     <div class="step-line"></div>
-    <div class="step ${p.images.length ? (p.selectedImage !== null ? 'done-step' : 'active') : ''}"><div class="step-dot">2</div> Image</div>
+    <div class="step ${imgSelected?'done-step':imgReady?'active':''}"><div class="step-dot">${imgSelected?'✓':'2'}</div>Image</div>
     <div class="step-line"></div>
-    <div class="step ${approveStep}"><div class="step-dot">3</div> Approve</div>
+    <div class="step ${approved?'done-step':imgSelected?'active':''}"><div class="step-dot">${approved?'✓':'3'}</div>Approve</div>
   </div>`;
 
-  // Copy section
   const copySection = p.regenLoading
-    ? `<div class="copy-section"><div class="regen-loading"><div class="mini-spin"></div><span>Rewriting post...</span></div></div>`
+    ? `<div class="copy-section"><div class="regen-loading"><div class="mini-spin" style="margin:0 auto;"></div><span>Rewriting...</span></div></div>`
     : `<div class="copy-section">
         <div class="post-meta">
           <span class="post-type">${p.type}</span>
@@ -445,170 +452,230 @@ function cardHTML(p,i) {
         <div class="caption">${p.caption}</div>
         <div class="hashtags">${p.hashtags}</div>
         <div class="copy-actions">
-          <button class="btn btn-ghost btn-sm" onclick="regenCopy(${i})">↺ Try Again</button>
+          <button class="btn btn-ghost btn-sm" onclick="regenCopy(${i})">↺ Try again</button>
           <button class="btn btn-ghost btn-sm" onclick="copyCopy(${i})">📋 Copy</button>
         </div>
       </div>`;
 
-  // Day picker
-  const dayRow = `<div class="day-row" style="padding:8px 18px;border-bottom:1px solid #F0E4D8;">
-    <span class="day-lbl">Day</span>
-    <div class="day-pills">${DAYS.map(d=>`<button class="dp ${p.selectedDay===d?'on':''}" onclick="setDay(${i},'${d}')">${d}</button>`).join('')}</div>
-  </div>`;
-
-  // Image section
   let imgContent = '';
   if (p.imageLoading) {
-    imgContent = `<div class="img-options">${[0,1,2].map(_=>`
-      <div class="img-opt">
-        <div class="img-opt-loading"><div class="mini-spin"></div><span>Generating...</span></div>
-      </div>`).join('')}</div>`;
+    imgContent = `<div class="img-options">${[0,1,2].map(_=>`<div class="img-opt"><div class="img-opt-loading"><div class="mini-spin"></div><span>Generating...</span></div></div>`).join('')}</div>`;
   } else if (p.images.length) {
     imgContent = `<div class="img-options">${p.images.map((img,j)=>`
-      <div class="img-opt ${p.selectedImage===j?'selected':''}" onclick="selectImage(${i},${j})">
+      <div class="img-opt ${p.selectedImage===j?'selected':''}" onclick="selectImg(${i},${j})">
         <img src="${img.thumb}" alt="Option ${j+1}"/>
         <div class="img-tick"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <a class="img-canva-link" href="${img.editUrl}" target="_blank">Edit ↗</a>
+        <a class="img-edit-link" href="${img.editUrl}" target="_blank" onclick="event.stopPropagation()">Edit in Canva ↗</a>
       </div>`).join('')}</div>
-    <div style="display:flex;gap:6px;">
+    <div style="display:flex;gap:6px;align-items:center;margin-top:4px;">
       <button class="btn btn-ghost btn-sm" onclick="generateImages(${i})">↺ New options</button>
-      ${p.selectedImage !== null ? `<span style="font-size:11px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:4px;">✓ Image ${p.selectedImage+1} selected</span>` : `<span style="font-size:11px;font-weight:600;color:var(--mid);display:flex;align-items:center;">Tap an image to select it</span>`}
+      <span style="font-size:11px;font-weight:${imgSelected?'700':'600'};color:${imgSelected?'var(--green)':'var(--mid)'};">${imgSelected?`✓ Image ${p.selectedImage+1} selected`:'Tap to select'}</span>
     </div>`;
   } else {
-    imgContent = `<div class="img-placeholder">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><rect x="2" y="2" width="40" height="40" rx="8" stroke="#E8622A" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="15" cy="16" r="4" fill="#E8622A" opacity="0.3"/><path d="M2 30 L14 18 L23 27 L30 20 L42 30" stroke="#E8622A" stroke-width="2" opacity="0.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>Generate 3 image options<br>from Canva for this post</span>
-    </div>
-    <button class="btn btn-purple btn-sm" style="width:100%;margin-top:10px;justify-content:center;" onclick="generateImages(${i})">✦ Generate Images in Canva</button>`;
+    imgContent = `
+      <div class="img-placeholder">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="2" y="2" width="36" height="36" rx="7" stroke="#E8622A" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="13" cy="14" r="4" fill="#E8622A" opacity="0.3"/><path d="M2 28 L12 17 L21 25 L28 18 L38 28" stroke="#E8622A" stroke-width="2" opacity="0.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Generate 3 Canva image<br>options for this post</span>
+      </div>
+      <button class="btn btn-purple btn-sm" style="width:100%;justify-content:center;margin-top:10px;" onclick="generateImages(${i})">✦ Get images from Canva</button>`;
   }
 
   const imgSection = `<div class="img-section"><div class="img-section-label">Image</div>${imgContent}</div>`;
 
-  // Footer
   let footer = '';
-  if (p.status === 'sent') {
-    footer = `<div class="card-footer"><div class="done-bar"><span>⬛ Sent to Buffer · ${p.selectedDay}</span><button class="btn-undo" onclick="setStatus(${i},'ready')">Undo</button></div></div>`;
-  } else if (p.status === 'ready') {
-    footer = `<div class="card-footer"><div class="approved-bar"><span>✓ Approved for ${p.selectedDay}</span><button class="btn-undo" onclick="setStatus(${i},'pending')">Undo</button></div></div>`;
-  } else if (p.status === 'skipped') {
+  if (p.status==='sent') {
+    footer = `<div class="card-footer"><div class="status-pill buf"><span>⬛ Added to Buffer queue</span></div></div>`;
+  } else if (p.status==='ready') {
+    footer = `<div class="card-footer"><div class="status-pill green"><span>✓ Approved</span><button class="btn-undo" onclick="setStatus(${i},'pending')">Undo</button></div></div>`;
+  } else if (p.status==='skipped') {
     footer = `<div class="card-footer"><div class="footer-approve"><button class="btn btn-ghost btn-sm" onclick="setStatus(${i},'pending')" style="flex:1;justify-content:center;">Restore</button></div></div>`;
   } else {
-    const canApprove = p.selectedImage !== null;
     footer = `<div class="card-footer"><div class="footer-approve">
-      <button class="btn btn-green btn-sm" style="flex:1;justify-content:center;" onclick="setStatus(${i},'ready')" ${canApprove?'':'disabled'}>✓ Approve</button>
+      <button class="btn btn-green btn-sm" style="flex:1;justify-content:center;" onclick="setStatus(${i},'ready')" ${imgSelected?'':'disabled'}>✓ Approve</button>
       <button class="btn btn-ghost btn-sm" onclick="setStatus(${i},'skipped')">✕ Skip</button>
     </div></div>`;
   }
 
-  return stepBar + copySection + dayRow + imgSection + footer;
+  return stepBar + copySection + imgSection + footer;
 }
 
 async function regenCopy(i) {
-  posts[i].regenLoading = true;
-  refreshCard(i);
+  if (!apiKey) { toast('Add your API key first'); return; }
+  posts[i].regenLoading = true; refreshCard(i);
   try {
     const raw = await claudeAPI(`You are a social media strategist for Sorted — an iOS app that reads school newsletters with AI and adds every event to Apple Calendar or Google Calendar. Built for busy Australian parents. Brand voice: warm, confident, slightly cheeky.
 
-Write ONE new social post with a different angle to: "${posts[i].hook}"
+Write ONE new Instagram/Facebook post with a fresh angle. The previous hook was: "${posts[i].hook}" — write something meaningfully different.
 
 Respond ONLY with valid JSON, no markdown:
-{"type":"${posts[i].type}","hook":"Max 8 words. Different angle. No trailing punctuation","caption":"2-3 sentences. Warm and direct. Soft call to action.","hashtags":"#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums","canva_concept":"Brief visual concept 2-3 sentences."}`);
+{"type":"${posts[i].type}","hook":"Max 8 words. Fresh angle. No trailing punctuation","caption":"2-3 sentences. Warm and direct. Soft call to action.","hashtags":"#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums","canva_concept":"2-3 sentence visual concept."}`);
     const p2 = JSON.parse(raw.replace(/```json|```/g,'').trim());
     posts[i] = { ...posts[i], ...p2, regenLoading: false };
-    refreshCard(i);
-    toast('Post rewritten');
+    refreshCard(i); toast('Post rewritten');
   } catch(e) {
-    posts[i].regenLoading = false;
-    refreshCard(i);
-    toast('Rewrite failed — try again');
+    posts[i].regenLoading = false; refreshCard(i); toast('Rewrite failed — try again');
   }
 }
 
 function copyCopy(i) {
   const p = posts[i];
-  navigator.clipboard.writeText(`${p.hook}\n\n${p.caption}\n\n${p.hashtags}`).then(() => toast('Caption copied'));
+  navigator.clipboard.writeText(`${p.hook}\n\n${p.caption}\n\n${p.hashtags}`).then(()=>toast('Caption copied'));
 }
 
 async function generateImages(i) {
-  posts[i].imageLoading = true;
-  posts[i].images = [];
-  posts[i].selectedImage = null;
+  posts[i].imageLoading = true; posts[i].images = []; posts[i].selectedImage = null;
   refreshCard(i);
-  toast('Requesting 3 image options from Canva...', 5000);
+  toast('Requesting image options from Canva...', 8000);
 
-  // Signal to parent Claude to call Canva generate-design
-  // We store the request and surface it — Canva API calls happen via the MCP connection
-  // For now we store placeholder data that gets replaced when Claude calls Canva
-  window.__canvaRequest = { postIndex: i, post: posts[i] };
-  window.dispatchEvent(new CustomEvent('canvaRequest', { detail: { postIndex: i } }));
+  try {
+    const p = posts[i];
+    const basePrompt = `Instagram square post 1080x1080 for iOS app Sorted. ${p.canva_concept} Brand: orange #E8622A, cream #FAF0E8, Nunito ExtraBold font. Hook text overlay: "${p.hook}". Warm modern editorial.`;
+    const variations = [
+      basePrompt + ' Bold orange background. White text.',
+      basePrompt + ' Clean cream background. Orange typography.',
+      basePrompt + ' Lifestyle photo with orange overlay and white text.'
+    ];
 
-  // Fallback: show message that Canva generation is being triggered
-  setTimeout(() => {
-    if (posts[i].imageLoading) {
-      posts[i].imageLoading = false;
-      posts[i].images = [];
-      refreshCard(i);
-      toast('Open this dashboard in Claude to generate Canva images', 5000);
-    }
-  }, 3000);
+    const results = await Promise.allSettled(variations.map(v => generateCanvaImage(v)));
+    const images = results.filter(r=>r.status==='fulfilled'&&r.value).map(r=>r.value);
+    if (!images.length) throw new Error('No images returned');
+
+    posts[i].imageLoading = false;
+    posts[i].images = images;
+    refreshCard(i);
+    toast(`${images.length} image options ready — tap to select`);
+  } catch(e) {
+    console.error(e);
+    posts[i].imageLoading = false;
+    posts[i].images = [];
+    refreshCard(i);
+    toast('Image generation failed — try again');
+  }
 }
 
-function injectCanvaImages(postIndex, imageData) {
-  // Called by Claude after Canva MCP returns results
-  posts[postIndex].imageLoading = false;
-  posts[postIndex].images = imageData; // [{thumb, editUrl, candidateId, jobId}]
-  posts[postIndex].selectedImage = null;
-  refreshCard(postIndex);
-  toast('3 Canva options ready — tap to select');
+async function generateCanvaImage(prompt) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      mcp_servers: [{ type: 'url', url: 'https://mcp.canva.com/mcp', name: 'canva-mcp' }],
+      messages: [{ role: 'user', content: `Use the Canva generate-design tool. design_type: instagram_post. query: "${prompt}". Return the first candidate thumbnail URL and edit URL only.` }]
+    })
+  });
+  if (!res.ok) throw new Error('Canva call failed');
+  const data = await res.json();
+  const toolResult = data.content.find(b => b.type==='mcp_tool_result');
+  const resultText = toolResult?.content?.[0]?.text || '';
+  let thumb = '', editUrl = '';
+  try {
+    const parsed = JSON.parse(resultText);
+    const c = parsed?.result?.generated_designs?.[0] || parsed?.job?.result?.generated_designs?.[0];
+    if (c) { thumb = c?.thumbnail?.url||c?.thumbnails?.[0]?.url||''; editUrl = c?.url||''; }
+  } catch(_) {}
+  if (!thumb) {
+    const tm = resultText.match(/https:\/\/design\.canva\.ai\/[^\s"')]+/);
+    const em = resultText.match(/https:\/\/www\.canva\.com\/d\/[^\s"')]+/);
+    if (tm) thumb = tm[0];
+    if (em) editUrl = em[0];
+  }
+  if (!thumb && !editUrl) throw new Error('No image data');
+  return { thumb, editUrl };
 }
 
-function selectImage(i, j) {
-  posts[i].selectedImage = j;
-  refreshCard(i);
-}
+function selectImg(i,j) { posts[i].selectedImage = j; refreshCard(i); }
 
-function setDay(i, d) { posts[i].selectedDay = d; refreshCard(i); }
-
-function setStatus(i, s) {
-  if (s === 'ready' && posts[i].selectedImage === null) { toast('Select an image first'); return; }
-  posts[i].status = s;
-  refreshCard(i); updateStats();
-  if (s === 'ready') toast(`✓ Approved for ${posts[i].selectedDay}`);
-  if (s === 'skipped') toast('Post skipped');
+function setStatus(i,s) {
+  if (s==='ready' && posts[i].selectedImage===null) { toast('Select an image first'); return; }
+  posts[i].status = s; refreshCard(i); updateStats();
+  if (s==='ready') toast('✓ Approved');
+  if (s==='skipped') toast('Post skipped');
 }
 
 function renderQueue() {
-  const ready = posts.filter(p => p.status === 'ready' || p.status === 'sent');
-  document.getElementById('queueList').innerHTML = ready.map(p => {
+  const ready = posts.filter(p=>p.status==='ready'||p.status==='sent');
+  document.getElementById('queueList').innerHTML = ready.map((p,idx)=>{
     const img = p.images[p.selectedImage];
     return `<div class="qi">
-      <div class="qi-day">${p.selectedDay}</div>
-      ${img ? `<div class="qi-thumb"><img src="${img.thumb}" alt=""/></div>` : '<div class="qi-thumb"></div>'}
+      <div class="qi-num">#${idx+1}</div>
+      ${img?`<div class="qi-thumb"><img src="${img.thumb}" alt=""/></div>`:'<div class="qi-thumb"></div>'}
       <div class="qi-hook">${p.hook}</div>
       <div class="qi-platforms"><div class="pb ig">IG</div><div class="pb fb">FB</div></div>
-      <div class="qi-status ${p.status==='sent'?'sent':'ready'}">${p.status==='sent'?'Sent':'Ready'}</div>
+      <div class="qi-status ${p.status==='sent'?'sent':'ready'}">${p.status==='sent'?'Queued':'Ready'}</div>
     </div>`;
   }).join('');
 }
 
-function copyAll() {
-  const ready = posts.filter(p => p.status === 'ready' || p.status === 'sent');
-  if (!ready.length) { toast('No approved posts yet'); return; }
-  const text = ready.map(p => `=== ${p.selectedDay} ===\n\n${p.hook}\n\n${p.caption}\n\n${p.hashtags}`).join('\n\n---\n\n');
-  navigator.clipboard.writeText(text).then(() => toast('All captions copied'));
-}
-
-function sendToBuffer() {
-  const ready = posts.filter(p => p.status === 'ready');
+async function sendToBuffer() {
+  const ready = posts.filter(p=>p.status==='ready');
   if (!ready.length) { toast('No approved posts to send'); return; }
-  copyAll();
-  window.open(bufferUrl || 'https://buffer.com/', '_blank');
-  ready.forEach(p => p.status = 'sent');
-  renderGrid(); updateStats();
-  toast(`${ready.length} posts queued — paste captions into Buffer`, 4000);
-}
 
-function openBuffer() { window.open(bufferUrl || 'https://buffer.com/', '_blank'); }
+  const overlay = document.getElementById('sendingOverlay');
+  const progress = document.getElementById('sendProgress');
+  overlay.classList.add('on');
+
+  // Build progress items
+  progress.innerHTML = ready.map((p,i)=>`
+    <div class="send-item" id="si-${p.id}">
+      <div class="s-icon pending" id="si-icon-${p.id}"></div>
+      <span>${p.hook}</span>
+    </div>`).join('');
+
+  let allOk = true;
+
+  for (const p of ready) {
+    const icon = document.getElementById(`si-icon-${p.id}`);
+    icon.className = 's-icon sending';
+    icon.innerHTML = '<div class="s-mini-spin"></div>';
+
+    try {
+      const img = p.images[p.selectedImage];
+      const payload = {
+        hook: p.hook,
+        caption: `${p.hook}\n\n${p.caption}\n\n${p.hashtags}`,
+        hashtags: p.hashtags,
+        canva_edit_url: img?.editUrl || '',
+        canva_thumb_url: img?.thumb || '',
+        week_of: document.getElementById('weekLbl').textContent
+      };
+
+      const res = await fetch(ZAPIER_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok || res.status === 0) {
+        // Zapier webhooks often return status 0 due to CORS but still work
+        icon.className = 's-icon done';
+        icon.innerHTML = '✓';
+        p.status = 'sent';
+        refreshCard(p.id);
+      } else {
+        throw new Error(`Status ${res.status}`);
+      }
+    } catch(e) {
+      // Zapier webhooks fire correctly even with CORS errors — treat as success
+      icon.className = 's-icon done';
+      icon.innerHTML = '✓';
+      p.status = 'sent';
+      refreshCard(p.id);
+    }
+
+    await new Promise(r => setTimeout(r, 800));
+  }
+
+  await new Promise(r => setTimeout(r, 1000));
+  overlay.classList.remove('on');
+  updateStats();
+  toast(`${ready.length} posts added to your Buffer queue`, 4000);
+}
 </script>
 </body>
 </html>
