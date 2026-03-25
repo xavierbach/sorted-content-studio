@@ -34,8 +34,8 @@
 
   main { max-width: 1080px; margin: 0 auto; padding: 32px 20px; }
 
-  .setup-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-  @media(max-width:800px){ .setup-grid { grid-template-columns: 1fr; } }
+  .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  @media(max-width:640px){ .setup-grid { grid-template-columns: 1fr; } }
   .setup-card { background: var(--dark); border-radius: 14px; padding: 16px 18px; transition: opacity 0.3s; }
   .setup-card.saved { opacity: 0.5; }
   .setup-card h3 { color: white; font-weight: 800; font-size: 13px; margin-bottom: 3px; }
@@ -67,8 +67,8 @@
   .pill { padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 800; }
   .pill-ig { background: rgba(225,48,108,0.2); color: #E1306C; }
   .pill-fb { background: rgba(24,119,242,0.2); color: #1877F2; }
-  .pill-flux { background: rgba(139,92,246,0.2); color: #8B5CF6; }
-  .pill-dalle { background: rgba(16,163,127,0.2); color: #10A37F; }
+  .pill-ai { background: rgba(16,163,127,0.2); color: #10A37F; }
+  .pill-gem { background: rgba(66,133,244,0.2); color: #4285F4; }
 
   .loading { background: var(--light); border: 2px solid #E0C8B8; border-radius: 14px; padding: 32px; text-align: center; margin-bottom: 24px; display: none; }
   .loading.on { display: block; }
@@ -108,22 +108,17 @@
   .imgtext-display { font-size: 22px; font-weight: 900; color: var(--dark); letter-spacing: -0.5px; line-height: 1.2; background: var(--light); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
 
   .image-section { padding: 14px 16px; border-bottom: 1px solid #F0E4D8; }
-
-  /* STYLE GROUPS */
-  .style-group-label { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--mid); opacity: 0.6; margin-bottom: 5px; }
-  .style-group { margin-bottom: 10px; }
-  .style-selector { display: flex; flex-wrap: wrap; gap: 5px; }
+  .style-selector { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
   .style-btn { padding: 5px 11px; border-radius: 100px; border: 1.5px solid #DDD0C8; background: transparent; font-family: 'Nunito',sans-serif; font-weight: 700; font-size: 11px; color: var(--mid); cursor: pointer; transition: all 0.12s; }
   .style-btn:hover { border-color: var(--orange); color: var(--orange); }
-  .style-btn.active-flux { background: #8B5CF6; border-color: #8B5CF6; color: white; }
-  .style-btn.active-dalle { background: #10A37F; border-color: #10A37F; color: white; }
-  .style-btn.active-photo { background: #8B5CF6; border-color: #8B5CF6; color: white; }
+  .style-btn.active { background: #10A37F; border-color: #10A37F; color: white; }
+  .gemini-btn { border-color: #4285F4; color: #4285F4; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+  .gemini-btn:hover { background: rgba(66,133,244,0.08); border-color: #4285F4; color: #4285F4; }
 
   .image-placeholder { background: var(--light); border-radius: 12px; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 20px; }
   .image-placeholder span { font-size: 12px; font-weight: 700; color: var(--mid); opacity: 0.6; line-height: 1.5; }
   .image-generating { background: var(--light); border-radius: 12px; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
-  .image-generating p { font-size: 12px; font-weight: 700; color: var(--mid); text-align: center; padding: 0 20px; }
-  .image-generating small { font-size: 11px; color: var(--mid); opacity: 0.6; }
+  .image-generating span { font-size: 12px; font-weight: 700; color: var(--mid); }
   .generated-img { width: 100%; aspect-ratio: 1; border-radius: 12px; object-fit: cover; display: block; }
   .image-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
 
@@ -178,17 +173,9 @@
         <button class="btn btn-orange btn-sm" onclick="saveApiKey()">Save</button>
       </div>
     </div>
-    <div class="setup-card" id="replicateCard">
-      <h3>📸 Replicate API Key</h3>
-      <p>For Flux photorealistic images. replicate.com</p>
-      <div class="setup-row">
-        <input class="setup-input" id="replicateKeyInput" type="password" placeholder="r8_..."/>
-        <button class="btn btn-orange btn-sm" onclick="saveReplicateKey()">Save</button>
-      </div>
-    </div>
     <div class="setup-card" id="openaiCard">
       <h3>🎨 OpenAI API Key</h3>
-      <p>For DALL-E illustrated styles. platform.openai.com</p>
+      <p>For DALL-E 3 illustrated images. platform.openai.com</p>
       <div class="setup-row">
         <input class="setup-input" id="openaiKeyInput" type="password" placeholder="sk-..."/>
         <button class="btn btn-orange btn-sm" onclick="saveOpenAIKey()">Save</button>
@@ -221,12 +208,12 @@
   <div class="gen-panel">
     <div>
       <h2>Generate this week's 3 posts</h2>
-      <p>Claude picks fresh angles every time. Choose photorealistic via Flux or illustrated via DALL-E per post.</p>
+      <p>Claude picks fresh angles every time. Choose an illustrated style via DALL-E or open Gemini for a photorealistic photo.</p>
       <div class="gen-pills">
         <div class="pill pill-ig">📸 Instagram</div>
         <div class="pill pill-fb">👤 Facebook</div>
-        <div class="pill pill-flux">⚡ Flux photorealistic</div>
-        <div class="pill pill-dalle">🎨 DALL-E illustrated</div>
+        <div class="pill pill-ai">🎨 DALL-E 3</div>
+        <div class="pill pill-gem">📷 Gemini photo</div>
       </div>
     </div>
     <button class="btn btn-white" id="genBtn" onclick="generateAll()">✦ Generate Posts</button>
@@ -243,7 +230,7 @@
 
   <div class="empty" id="emptyState">
     <h2>Monday sorted in minutes</h2>
-    <p>Generate 3 posts — pick photorealistic or illustrated for each image, then post.</p>
+    <p>Generate 3 posts — pick an illustrated style or open Gemini for a photorealistic image, then post.</p>
     <button class="btn btn-orange" onclick="generateAll()">✦ Generate this week's posts</button>
   </div>
 
@@ -253,47 +240,13 @@
 
 <script>
 
-// ─── IMAGE STYLES ─────────────────────────────────────────────────────────────
-
-const PHOTO_STYLES = {
-  photo: {
-    label: '📸 Photorealistic',
-    engine: 'flux',
-    prompt_prefix: 'Photorealistic lifestyle photography. Warm natural light. Cinematic 35mm depth of field. Real human skin, hair and expressions. Magazine quality. No text in image.'
-  }
+const IMAGE_STYLES = {
+  pixar:      { label:'✨ Pixar',       prefix:'Pixar-style 3D animated illustration. Warm cinematic lighting. Rounded expressive characters with big eyes and smooth skin. Rich saturated warm oranges, creams and soft whites. Soft bokeh background. No text in image.' },
+  flat:       { label:'🎨 Flat',        prefix:'Bold flat vector illustration. Clean geometric shapes. Warm brand colours — orange #E8622A, cream #FAF0E8, near-black. Simple expressive characters. Modern editorial style. No text in image.' },
+  comic:      { label:'💥 Comic',       prefix:'Retro pop art comic illustration. Bold black outlines. Halftone dot patterns. High contrast warm colours — orange, yellow, cream, black. Expressive dramatic poses. No text in image.' },
+  watercolour:{ label:'🖌 Watercolour', prefix:'Loose editorial watercolour illustration. Soft wet-on-wet washes. Warm orange and cream tones. Expressive gestural brushwork. Premium editorial feel. No text in image.' },
+  render3d:   { label:'🧊 3D Render',   prefix:'Clean modern 3D render illustration. Smooth pastel surfaces. Soft ambient shadows. Warm orange and cream palette. Minimal stylised characters. No text in image.' }
 };
-
-const ILLUSTRATED_STYLES = {
-  pixar: {
-    label: '✨ Pixar',
-    engine: 'dalle',
-    prompt_prefix: 'Pixar-style 3D animated illustration. Warm cinematic lighting. Rounded expressive characters with big eyes and smooth skin. Rich saturated warm oranges, creams and soft whites. Soft bokeh background. No text in image.'
-  },
-  flat: {
-    label: '🎨 Flat',
-    engine: 'dalle',
-    prompt_prefix: 'Bold flat vector illustration. Clean geometric shapes. Warm brand colours — orange #E8622A, cream #FAF0E8, near-black. Simple expressive characters. Modern editorial style. No text in image.'
-  },
-  comic: {
-    label: '💥 Comic',
-    engine: 'dalle',
-    prompt_prefix: 'Retro pop art comic illustration. Bold black outlines. Halftone dot patterns. High contrast warm colours — orange, yellow, cream, black. Expressive dramatic character poses. No text in image.'
-  },
-  watercolour: {
-    label: '🖌 Watercolour',
-    engine: 'dalle',
-    prompt_prefix: 'Loose editorial watercolour illustration. Soft wet-on-wet washes. Warm orange and cream tones. Expressive gestural brushwork. Premium editorial feel. No text in image.'
-  },
-  render3d: {
-    label: '🧊 3D Render',
-    engine: 'dalle',
-    prompt_prefix: 'Clean modern 3D render illustration. Smooth pastel surfaces. Soft ambient shadows. Warm orange and cream palette. Minimal stylised characters. No text in image.'
-  }
-};
-
-const ALL_STYLES = { ...PHOTO_STYLES, ...ILLUSTRATED_STYLES };
-
-// ─── CONTENT POOLS ────────────────────────────────────────────────────────────
 
 const HISTORY_KEY = 'sorted_post_history';
 const MAX_HISTORY = 12;
@@ -340,14 +293,9 @@ const SCENE_POOL = [
   "mum laughing at something on her phone while her kid reads next to her on the couch"
 ];
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
-
 let posts = [];
 let apiKey = localStorage.getItem('sorted_api_key') || '';
-let replicateKey = localStorage.getItem('sorted_replicate_key') || '';
 let openaiKey = localStorage.getItem('sorted_openai_key') || '';
-
-// ─── INIT ─────────────────────────────────────────────────────────────────────
 
 const now = new Date();
 const mon = new Date(now);
@@ -355,16 +303,13 @@ mon.setDate(now.getDate() - now.getDay() + 1);
 document.getElementById('weekLbl').textContent = `Week of ${mon.toLocaleDateString('en-AU',{day:'numeric',month:'short'})}`;
 
 if (apiKey) { document.getElementById('apiKeyInput').value = apiKey; document.getElementById('apiCard').classList.add('saved'); }
-if (replicateKey) { document.getElementById('replicateKeyInput').value = replicateKey; document.getElementById('replicateCard').classList.add('saved'); }
 if (openaiKey) { document.getElementById('openaiKeyInput').value = openaiKey; document.getElementById('openaiCard').classList.add('saved'); }
 updateHistoryBanner();
 
-// ─── HISTORY ──────────────────────────────────────────────────────────────────
-
 function getHistory() { try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch { return []; } }
-function saveToHistory(newPosts) {
+function saveToHistory(p) {
   const h = getHistory();
-  newPosts.forEach(p => h.push({ angle: p.angle_used, scene: p.scene_used, hook: p.hook }));
+  p.forEach(x => h.push({ angle:x.angle_used, scene:x.scene_used, hook:x.hook }));
   localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(-MAX_HISTORY)));
   updateHistoryBanner();
 }
@@ -372,8 +317,8 @@ function clearHistory() { localStorage.removeItem(HISTORY_KEY); updateHistoryBan
 function updateHistoryBanner() {
   const h = getHistory();
   const b = document.getElementById('historyBanner');
-  if (!h.length) { b.style.display = 'none'; return; }
-  b.style.display = 'flex';
+  if (!h.length) { b.style.display='none'; return; }
+  b.style.display='flex';
   document.getElementById('historyLabel').textContent = `📚 ${h.length} past posts in memory — avoiding repeats`;
   document.getElementById('historyDetail').textContent = `Most recent: ${h.slice(-3).map(x=>x.hook).join(' · ')}`;
 }
@@ -395,108 +340,65 @@ function pickFresh(pool, history, key, count) {
   return (fresh.length >= count ? fresh : pool).sort(()=>Math.random()-0.5).slice(0,count);
 }
 
-// ─── API HELPERS ──────────────────────────────────────────────────────────────
-
 function saveApiKey() {
   const v = document.getElementById('apiKeyInput').value.trim();
   if (v) { apiKey=v; localStorage.setItem('sorted_api_key',v); document.getElementById('apiCard').classList.add('saved'); document.getElementById('noKeyAlert').classList.remove('on'); toast('Anthropic key saved'); }
-}
-function saveReplicateKey() {
-  const v = document.getElementById('replicateKeyInput').value.trim();
-  if (v) { replicateKey=v; localStorage.setItem('sorted_replicate_key',v); document.getElementById('replicateCard').classList.add('saved'); toast('Replicate key saved'); }
 }
 function saveOpenAIKey() {
   const v = document.getElementById('openaiKeyInput').value.trim();
   if (v) { openaiKey=v; localStorage.setItem('sorted_openai_key',v); document.getElementById('openaiCard').classList.add('saved'); toast('OpenAI key saved'); }
 }
-
 function toast(msg, ms=3000) {
-  const t = document.getElementById('toast'); t.textContent=msg; t.classList.add('on');
-  setTimeout(()=>t.classList.remove('on'), ms);
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),ms);
 }
 function updateStats() {
-  document.getElementById('sTotal').textContent = posts.length;
-  document.getElementById('sDone').textContent = posts.filter(p=>p.status==='done').length;
-  document.getElementById('sSkipped').textContent = posts.filter(p=>p.status==='skipped').length;
+  document.getElementById('sTotal').textContent=posts.length;
+  document.getElementById('sDone').textContent=posts.filter(p=>p.status==='done').length;
+  document.getElementById('sSkipped').textContent=posts.filter(p=>p.status==='skipped').length;
 }
-
 async function claudeAPI(prompt) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type':'application/json', 'x-api-key':apiKey, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' },
-    body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1200, messages:[{role:'user',content:prompt}] })
+  const res = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})
   });
-  if (!res.ok) { const e=await res.json().catch(()=>({})); throw new Error(e?.error?.message||`API error ${res.status}`); }
-  const d = await res.json();
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||`API error ${res.status}`);}
+  const d=await res.json();
   return d.content.map(i=>i.text||'').join('');
 }
-
-async function fluxGenerate(scene) {
-  // Flux 1.1 Pro via Replicate
-  const prompt = `Photorealistic lifestyle photography. Australian parent aged 28-42. ${scene} Warm natural light. Cinematic 35mm depth of field. Magazine quality. No text in image.`;
-
-  // Start prediction
-  const startRes = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-1.1-pro/predictions', {
-    method: 'POST',
-    headers: { 'Content-Type':'application/json', 'Authorization':`Bearer ${replicateKey}`, 'Prefer':'wait' },
-    body: JSON.stringify({ input: { prompt, aspect_ratio:'1:1', output_format:'webp', output_quality:90 } })
-  });
-  if (!startRes.ok) { const e=await startRes.json().catch(()=>({})); throw new Error(e?.detail||`Replicate error ${startRes.status}`); }
-  const prediction = await startRes.json();
-
-  // If using Prefer: wait, result may already be ready
-  if (prediction.status === 'succeeded' && prediction.output) {
-    return Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
-  }
-
-  // Otherwise poll until done
-  const pollUrl = prediction.urls?.get || `https://api.replicate.com/v1/predictions/${prediction.id}`;
-  for (let i = 0; i < 60; i++) {
-    await new Promise(r => setTimeout(r, 2000));
-    const pollRes = await fetch(pollUrl, { headers: { 'Authorization':`Bearer ${replicateKey}` } });
-    const poll = await pollRes.json();
-    if (poll.status === 'succeeded' && poll.output) {
-      return Array.isArray(poll.output) ? poll.output[0] : poll.output;
-    }
-    if (poll.status === 'failed') throw new Error(poll.error || 'Flux generation failed');
-  }
-  throw new Error('Timed out waiting for image');
-}
-
 async function dalleGenerate(styleKey, scene) {
-  const style = ILLUSTRATED_STYLES[styleKey] || ILLUSTRATED_STYLES.pixar;
-  const res = await fetch('https://api.openai.com/v1/images/generations', {
-    method: 'POST',
-    headers: { 'Content-Type':'application/json', 'Authorization':`Bearer ${openaiKey}` },
-    body: JSON.stringify({ model:'dall-e-3', prompt:`${style.prompt_prefix} ${scene}`, n:1, size:'1024x1024', quality:'standard' })
+  const style = IMAGE_STYLES[styleKey] || IMAGE_STYLES.pixar;
+  const res = await fetch('https://api.openai.com/v1/images/generations',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${openaiKey}`},
+    body:JSON.stringify({model:'dall-e-3',prompt:`${style.prefix} ${scene}`,n:1,size:'1024x1024',quality:'standard'})
   });
-  if (!res.ok) { const e=await res.json().catch(()=>({})); throw new Error(e?.error?.message||`OpenAI error ${res.status}`); }
-  const d = await res.json();
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||`OpenAI error ${res.status}`);}
+  const d=await res.json();
   return d.data[0].url;
 }
 
-// ─── GENERATE COPY ────────────────────────────────────────────────────────────
-
 async function generateAll() {
-  if (!apiKey) { document.getElementById('noKeyAlert').classList.add('on'); return; }
-  const btn = document.getElementById('genBtn');
-  const loading = document.getElementById('mainLoading');
-  document.getElementById('emptyState').style.display = 'none';
-  document.getElementById('postsGrid').innerHTML = '';
-  posts = []; updateStats();
-  btn.disabled = true; btn.textContent = '... Writing';
+  if(!apiKey){document.getElementById('noKeyAlert').classList.add('on');return;}
+  const btn=document.getElementById('genBtn');
+  const loading=document.getElementById('mainLoading');
+  document.getElementById('emptyState').style.display='none';
+  document.getElementById('postsGrid').innerHTML='';
+  posts=[];updateStats();
+  btn.disabled=true;btn.textContent='... Writing';
   loading.classList.add('on');
-  document.getElementById('progFill').style.width = '10%';
-  document.getElementById('loadMsg').textContent = 'Claude is writing your 3 posts...';
-  document.getElementById('loadSub').textContent = 'Picking fresh angles — checking history to avoid repeats';
+  document.getElementById('progFill').style.width='10%';
+  document.getElementById('loadMsg').textContent='Claude is writing your 3 posts...';
+  document.getElementById('loadSub').textContent='Picking fresh angles — checking history to avoid repeats';
 
-  const history = getHistory();
-  const chosenAngles = pickFresh(ANGLE_POOL, history, 'angle', 3);
-  const chosenScenes = pickFresh(SCENE_POOL, history, 'scene', 3);
-  const avoidList = getAvoidList();
+  const history=getHistory();
+  const chosenAngles=pickFresh(ANGLE_POOL,history,'angle',3);
+  const chosenScenes=pickFresh(SCENE_POOL,history,'scene',3);
+  const avoidList=getAvoidList();
 
   try {
-    const raw = await claudeAPI(`You are a senior social media strategist for Sorted — an iOS app that uses AI to read school newsletters and add every event to Apple Calendar or Google Calendar. No account needed. Built for busy Australian parents.
+    const raw=await claudeAPI(`You are a senior social media strategist for Sorted — an iOS app that uses AI to read school newsletters and add every event to Apple Calendar or Google Calendar. No account needed. Built for busy Australian parents.
 
 Brand voice: warm, confident, slightly cheeky. Never corporate. Never salesy.
 Tagline: "AI reads the newsletter so you do not have to."
@@ -510,8 +412,8 @@ Post 3: Angle — "${chosenAngles[2]}" | Scene — "${chosenScenes[2]}"
 
 For each post:
 1. Caption: hook (max 8 words, punchy, no trailing punctuation) + 2-3 sentence body (warm, direct, soft CTA) + hashtags
-2. Image overlay text: max 6 words, bold and punchy, no punctuation, goes on the image
-3. Image scene: description of the character and scene for image generation. Based on the assigned scene. Expression, pose, setting, mood. No text in image. 2-3 sentences.
+2. Image overlay text: max 6 words, bold and punchy, no punctuation
+3. Image scene: character and scene description for illustration. Expression, pose, setting, mood. No text in image. 2-3 sentences.
 
 Respond ONLY with valid JSON. No markdown:
 {"posts":[{
@@ -523,64 +425,66 @@ Respond ONLY with valid JSON. No markdown:
   "caption":"body sentences",
   "hashtags":"#Sorted #SchoolMum #BusyParent #SchoolDates #ParentLife #NeverMissADate #AustralianMums",
   "image_text":"max 6 words",
-  "image_scene":"character and scene description. No text. 2-3 sentences."
+  "image_scene":"character and scene. No text. 2-3 sentences."
 }]}`);
 
-    document.getElementById('progFill').style.width = '85%';
-    const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
-    posts = parsed.posts.slice(0,3).map((p,i) => ({
-      ...p, id:i, status:'pending', regenLoading:false,
-      imageUrl:null, imageLoading:false, imageError:null,
-      selectedStyle:'photo'
+    document.getElementById('progFill').style.width='85%';
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    posts=parsed.posts.slice(0,3).map((p,i)=>({
+      ...p,id:i,status:'pending',regenLoading:false,
+      imageUrl:null,imageLoading:false,imageError:null,selectedStyle:'pixar'
     }));
     saveToHistory(posts);
     await new Promise(r=>setTimeout(r,400));
-    document.getElementById('progFill').style.width = '100%';
-    setTimeout(() => {
+    document.getElementById('progFill').style.width='100%';
+    setTimeout(()=>{
       loading.classList.remove('on');
-      renderGrid(); updateStats();
-      btn.disabled = false; btn.textContent = '↺ Regenerate';
+      renderGrid();updateStats();
+      btn.disabled=false;btn.textContent='↺ Regenerate';
       toast(`${posts.length} fresh posts ready`);
-    }, 300);
+    },300);
   } catch(e) {
     console.error(e);
     loading.classList.remove('on');
-    btn.disabled = false; btn.textContent = '✦ Generate Posts';
+    btn.disabled=false;btn.textContent='✦ Generate Posts';
     toast(`Error: ${e.message||'Check your API key and try again'}`);
   }
 }
 
-// ─── CARD RENDER ──────────────────────────────────────────────────────────────
-
 function renderGrid() {
-  const g = document.getElementById('postsGrid');
-  g.innerHTML = '';
-  posts.forEach((p,i) => {
-    const c = document.createElement('div');
-    c.className = `card ${p.status==='done'?'done':p.status==='skipped'?'skipped':''}`;
-    c.id = `card-${i}`; c.style.animationDelay = `${i*0.08}s`;
-    c.innerHTML = cardHTML(p,i); g.appendChild(c);
+  const g=document.getElementById('postsGrid');
+  g.innerHTML='';
+  posts.forEach((p,i)=>{
+    const c=document.createElement('div');
+    c.className=`card ${p.status==='done'?'done':p.status==='skipped'?'skipped':''}`;
+    c.id=`card-${i}`;c.style.animationDelay=`${i*0.08}s`;
+    c.innerHTML=cardHTML(p,i);g.appendChild(c);
   });
 }
 
 function refreshCard(i) {
-  const c = document.getElementById(`card-${i}`);
-  const p = posts[i];
-  c.className = `card ${p.status==='done'?'done':p.status==='skipped'?'skipped':''}`;
-  c.innerHTML = cardHTML(p,i);
+  const c=document.getElementById(`card-${i}`);
+  const p=posts[i];
+  c.className=`card ${p.status==='done'?'done':p.status==='skipped'?'skipped':''}`;
+  c.innerHTML=cardHTML(p,i);
 }
 
 function toneLabel(t) {
   return {stressed:'😩 Stressed',happy:'😊 Happy',confident:'💪 Confident'}[t]||t||'';
 }
 
+function buildGeminiUrl(scene) {
+  const prompt=encodeURIComponent(`Photorealistic lifestyle photo. Australian parent aged 28-42. ${scene} Warm natural light. Cinematic 35mm depth of field. No text in image.`);
+  return `https://gemini.google.com/app?q=${prompt}`;
+}
+
 function cardHTML(p,i) {
-  if (p.regenLoading) {
+  if(p.regenLoading){
     return `<div class="card-header"><span class="post-type">${p.type}</span></div>
     <div class="regen-loading"><div class="mini-spin"></div>Rewriting post...</div>`;
   }
 
-  const header = `<div class="card-header">
+  const header=`<div class="card-header">
     <span class="post-type">${p.type}</span>
     <div class="card-header-right">
       <span class="tone-tag">${toneLabel(p.tone)}</span>
@@ -588,7 +492,7 @@ function cardHTML(p,i) {
     </div>
   </div>`;
 
-  const copy = `<div class="copy-section">
+  const copy=`<div class="copy-section">
     <div class="section-label">Caption</div>
     <div class="hook">${p.hook}</div>
     <div class="caption">${p.caption}</div>
@@ -599,7 +503,7 @@ function cardHTML(p,i) {
     </div>
   </div>`;
 
-  const imgtext = `<div class="imgtext-section">
+  const imgtext=`<div class="imgtext-section">
     <div class="section-label">Image text <span class="badge" style="background:rgba(232,98,42,0.12);color:var(--orange);">under 6 words</span></div>
     <div class="imgtext-display">${p.image_text||''}</div>
     <div class="copy-actions">
@@ -607,59 +511,40 @@ function cardHTML(p,i) {
     </div>
   </div>`;
 
-  // Photo style buttons
-  const photoButtons = Object.entries(PHOTO_STYLES).map(([key,s]) =>
-    `<button class="style-btn ${p.selectedStyle===key?'active-photo':''}" onclick="setStyle(${i},'${key}')">${s.label}</button>`
+  const styleButtons=Object.entries(IMAGE_STYLES).map(([key,s])=>
+    `<button class="style-btn ${p.selectedStyle===key?'active':''}" onclick="setStyle(${i},'${key}')">${s.label}</button>`
   ).join('');
 
-  // Illustrated style buttons
-  const illustratedButtons = Object.entries(ILLUSTRATED_STYLES).map(([key,s]) =>
-    `<button class="style-btn ${p.selectedStyle===key?'active-dalle':''}" onclick="setStyle(${i},'${key}')">${s.label}</button>`
-  ).join('');
+  const geminiBtn=`<a class="style-btn gemini-btn" href="${buildGeminiUrl(p.image_scene)}" target="_blank" onclick="copyGeminiPrompt(${i})">📷 Gemini photo ↗</a>`;
 
-  // Which key is needed for selected style
-  const selectedStyle = ALL_STYLES[p.selectedStyle] || PHOTO_STYLES.photo;
-  const needsReplicate = selectedStyle.engine === 'flux';
-  const hasKey = needsReplicate ? !!replicateKey : !!openaiKey;
-  const missingKeyMsg = needsReplicate ? 'Add your Replicate key above to generate photorealistic images' : 'Add your OpenAI key above to generate illustrated images';
-  const engineLabel = needsReplicate ? 'Flux 1.1 Pro' : 'DALL-E 3';
-
-  let imageContent = '';
-  if (p.imageLoading) {
-    imageContent = `<div class="image-generating">
+  let imageContent='';
+  if(p.imageLoading){
+    imageContent=`<div class="image-generating">
       <div class="spinner" style="width:28px;height:28px;margin:0;"></div>
-      <p>Generating with ${engineLabel}...</p>
-      ${needsReplicate ? '<small>Flux takes 15-30 seconds</small>' : ''}
+      <span>Generating ${IMAGE_STYLES[p.selectedStyle]?.label||''} image...</span>
     </div>`;
-  } else if (p.imageUrl) {
-    imageContent = `<img class="generated-img" src="${p.imageUrl}" alt="Generated image"/>
+  } else if(p.imageUrl){
+    imageContent=`<img class="generated-img" src="${p.imageUrl}" alt="Generated image"/>
     <div class="image-actions">
       <a href="${p.imageUrl}" download="sorted-post-${i+1}.png" target="_blank" class="btn btn-green btn-sm">⬇ Download</a>
       <button class="btn btn-ghost btn-sm" onclick="generateImage(${i})">↺ Regenerate</button>
     </div>`;
   } else {
-    imageContent = `<div class="image-placeholder">
+    imageContent=`<div class="image-placeholder">
       <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="2" y="2" width="36" height="36" rx="7" stroke="#E8622A" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="13" cy="14" r="4" fill="#E8622A" opacity="0.3"/><path d="M2 28 L12 17 L21 25 L28 18 L38 28" stroke="#E8622A" stroke-width="2" opacity="0.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>${!hasKey ? missingKeyMsg : `Ready to generate with ${engineLabel}`}</span>
+      <span>${!openaiKey?'Add your OpenAI key above to generate illustrated images':'Select a style and generate, or open Gemini for a photo'}</span>
     </div>
-    ${hasKey ? `<div class="image-actions"><button class="btn btn-orange btn-sm" style="flex:1;justify-content:center;" onclick="generateImage(${i})">Generate ${selectedStyle.label} image</button></div>` : ''}`;
+    ${openaiKey?`<div class="image-actions"><button class="btn btn-orange btn-sm" style="flex:1;justify-content:center;" onclick="generateImage(${i})">Generate ${IMAGE_STYLES[p.selectedStyle]?.label||''} image</button></div>`:''}`;
   }
-  if (p.imageError) imageContent += `<div style="font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">${p.imageError}</div>`;
+  if(p.imageError) imageContent+=`<div style="font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">${p.imageError}</div>`;
 
-  const imageSection = `<div class="image-section">
-    <div class="section-label">Image style</div>
-    <div class="style-group">
-      <div class="style-group-label">Photorealistic — Flux 1.1 Pro</div>
-      <div class="style-selector">${photoButtons}</div>
-    </div>
-    <div class="style-group">
-      <div class="style-group-label">Illustrated — DALL-E 3</div>
-      <div class="style-selector">${illustratedButtons}</div>
-    </div>
+  const imageSection=`<div class="image-section">
+    <div class="section-label">Image</div>
+    <div class="style-selector">${styleButtons}${geminiBtn}</div>
     ${imageContent}
   </div>`;
 
-  const promptSection = `<div class="prompt-section">
+  const promptSection=`<div class="prompt-section">
     <div class="section-label">Scene description</div>
     <div class="prompt-box">${p.image_scene||''}</div>
     <div class="copy-actions">
@@ -667,60 +552,51 @@ function cardHTML(p,i) {
     </div>
   </div>`;
 
-  let footer = '';
-  if (p.status==='done') {
-    footer = `<div class="card-footer"><div class="done-pill"><span>✓ Done</span><button class="btn-undo" onclick="setStatus(${i},'pending')">Undo</button></div></div>`;
-  } else if (p.status==='skipped') {
-    footer = `<div class="card-footer"><div class="footer-btns"><button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center;" onclick="setStatus(${i},'pending')">Restore</button></div></div>`;
+  let footer='';
+  if(p.status==='done'){
+    footer=`<div class="card-footer"><div class="done-pill"><span>✓ Done</span><button class="btn-undo" onclick="setStatus(${i},'pending')">Undo</button></div></div>`;
+  } else if(p.status==='skipped'){
+    footer=`<div class="card-footer"><div class="footer-btns"><button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center;" onclick="setStatus(${i},'pending')">Restore</button></div></div>`;
   } else {
-    footer = `<div class="card-footer"><div class="footer-btns">
+    footer=`<div class="card-footer"><div class="footer-btns">
       <button class="btn btn-green btn-sm" style="flex:1;justify-content:center;" onclick="setStatus(${i},'done')">✓ Mark done</button>
       <button class="btn btn-ghost btn-sm" onclick="setStatus(${i},'skipped')">✕ Skip</button>
     </div></div>`;
   }
 
-  return header + copy + imgtext + imageSection + promptSection + footer;
+  return header+copy+imgtext+imageSection+promptSection+footer;
 }
 
-// ─── ACTIONS ──────────────────────────────────────────────────────────────────
-
-function setStyle(i, key) {
-  posts[i].selectedStyle = key;
-  posts[i].imageUrl = null;
-  posts[i].imageError = null;
+function setStyle(i,key){
+  posts[i].selectedStyle=key;posts[i].imageUrl=null;posts[i].imageError=null;
   refreshCard(i);
 }
 
-async function generateImage(i) {
-  const p = posts[i];
-  const style = ALL_STYLES[p.selectedStyle] || PHOTO_STYLES.photo;
-
-  if (style.engine === 'flux' && !replicateKey) { toast('Add your Replicate key first'); return; }
-  if (style.engine === 'dalle' && !openaiKey) { toast('Add your OpenAI key first'); return; }
-
-  posts[i].imageLoading = true; posts[i].imageError = null; refreshCard(i);
-
-  try {
-    let url;
-    if (style.engine === 'flux') {
-      url = await fluxGenerate(p.image_scene);
-    } else {
-      url = await dalleGenerate(p.selectedStyle, p.image_scene);
-    }
-    posts[i].imageUrl = url; posts[i].imageLoading = false;
-    refreshCard(i); toast('Image ready — click Download to save');
-  } catch(e) {
-    posts[i].imageLoading = false;
-    posts[i].imageError = `Image failed: ${e.message}`;
-    refreshCard(i); toast(`Image error: ${e.message}`);
+async function generateImage(i){
+  if(!openaiKey){toast('Add your OpenAI key first');return;}
+  posts[i].imageLoading=true;posts[i].imageError=null;refreshCard(i);
+  try{
+    const url=await dalleGenerate(posts[i].selectedStyle,posts[i].image_scene);
+    posts[i].imageUrl=url;posts[i].imageLoading=false;
+    refreshCard(i);toast('Image ready — click Download to save');
+  }catch(e){
+    posts[i].imageLoading=false;posts[i].imageError=`Image failed: ${e.message}`;
+    refreshCard(i);toast(`Image error: ${e.message}`);
   }
 }
 
-async function regenCopy(i) {
-  if (!apiKey) { toast('Add your API key first'); return; }
-  posts[i].regenLoading = true; refreshCard(i);
-  try {
-    const raw = await claudeAPI(`You are a social media strategist for Sorted — an iOS app that reads school newsletters with AI and adds every event to Apple Calendar or Google Calendar. Built for busy Australian parents. Brand voice: warm, confident, slightly cheeky.
+function copyGeminiPrompt(i){
+  const p=posts[i];
+  const prompt=`Photorealistic lifestyle photo. Australian parent aged 28-42. ${p.image_scene} Warm natural light. Cinematic 35mm depth of field. No text in image.`;
+  navigator.clipboard.writeText(prompt).catch(()=>{});
+  toast('Photorealistic prompt copied — paste into Gemini if needed');
+}
+
+async function regenCopy(i){
+  if(!apiKey){toast('Add your API key first');return;}
+  posts[i].regenLoading=true;refreshCard(i);
+  try{
+    const raw=await claudeAPI(`You are a social media strategist for Sorted — an iOS app that reads school newsletters with AI and adds every event to Apple Calendar or Google Calendar. Built for busy Australian parents. Brand voice: warm, confident, slightly cheeky.
 
 Write ONE new post with a completely different angle. Previous hook: "${posts[i].hook}" — must be different.
 
@@ -738,24 +614,21 @@ Respond ONLY with valid JSON, no markdown:
   "image_text":"max 6 words, no punctuation",
   "image_scene":"character and scene. No text. 2-3 sentences."
 }`);
-    const p2 = JSON.parse(raw.replace(/```json|```/g,'').trim());
-    posts[i] = { ...posts[i], ...p2, regenLoading:false, imageUrl:null, imageError:null };
-    refreshCard(i); toast('Post rewritten');
-  } catch(e) {
-    posts[i].regenLoading = false; refreshCard(i); toast('Rewrite failed — try again');
+    const p2=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    posts[i]={...posts[i],...p2,regenLoading:false,imageUrl:null,imageError:null};
+    refreshCard(i);toast('Post rewritten');
+  }catch(e){
+    posts[i].regenLoading=false;refreshCard(i);toast('Rewrite failed — try again');
   }
 }
 
-function copyCopy(i) {
-  const p = posts[i];
-  navigator.clipboard.writeText(`${p.hook}\n\n${p.caption}\n\n${p.hashtags}`).then(()=>toast('Caption copied'));
-}
-function copyImageText(i) { navigator.clipboard.writeText(posts[i].image_text||'').then(()=>toast('Image text copied')); }
-function copyPrompt(i) { navigator.clipboard.writeText(posts[i].image_scene||'').then(()=>toast('Scene description copied')); }
-function setStatus(i,s) {
-  posts[i].status=s; refreshCard(i); updateStats();
-  if(s==='done') toast('✓ Marked as done');
-  if(s==='skipped') toast('Post skipped');
+function copyCopy(i){const p=posts[i];navigator.clipboard.writeText(`${p.hook}\n\n${p.caption}\n\n${p.hashtags}`).then(()=>toast('Caption copied'));}
+function copyImageText(i){navigator.clipboard.writeText(posts[i].image_text||'').then(()=>toast('Image text copied'));}
+function copyPrompt(i){navigator.clipboard.writeText(posts[i].image_scene||'').then(()=>toast('Scene description copied'));}
+function setStatus(i,s){
+  posts[i].status=s;refreshCard(i);updateStats();
+  if(s==='done')toast('✓ Marked as done');
+  if(s==='skipped')toast('Post skipped');
 }
 </script>
 </body>
